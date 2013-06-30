@@ -16,7 +16,6 @@ public class AnimationWindow extends JComponent {
     private static int FRAMES_PER_SECOND = 100;
 
     private AnimationEventListener eventListener;
-
     private BouncingBall ball;
     private Timer timer;
     private boolean mode;
