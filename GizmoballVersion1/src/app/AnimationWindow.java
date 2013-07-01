@@ -76,8 +76,7 @@ public class AnimationWindow extends JComponent {
         // should call us back. Ps: 1000ms
         timer = new Timer(1000 / FRAMES_PER_SECOND, eventListener);
         mode = false;
-  //      this.setBorder(BorderFactory.createLineBorder(Color.black));
-        setBackground(Color.BLACK);
+        this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
     
     /**

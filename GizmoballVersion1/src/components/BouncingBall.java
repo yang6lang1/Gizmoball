@@ -19,7 +19,7 @@ public class BouncingBall {
     //the vertical velocity
     private int vy = (int) ((Math.random() * VELOCITY_STEP) + VELOCITY_STEP);
 
-    private int radius = 6;//radius of the ball
+    private int radius = 8;//radius of the ball
     private Color color = new Color(0,0,205);
 
     // Keep track of the animation window that will be drawing this ball.
