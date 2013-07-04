@@ -47,6 +47,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.Timer;
 
+import system.Constants;
+
 import components.BouncingBall;
 
 /*AnimationWindow contains all the oprations for game mode
@@ -55,7 +57,7 @@ public class AnimationWindow extends JComponent {
     private static final long serialVersionUID = 3257281448464364082L;
 
     // Controls how often we redraw
-    private static int FRAMES_PER_SECOND = 100;
+    private static int FRAMES_PER_SECOND = Constants.FRAMES_PER_SECOND;
 
     private AnimationEventListener eventListener;
     private BouncingBall ball;

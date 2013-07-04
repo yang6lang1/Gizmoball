@@ -4,22 +4,31 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import system.Constants;
 import app.AnimationWindow;
 
 public class BouncingBall {
 
-	private static double VELOCITY_STEP =2.0; //TODO: I want to allow the user to change the speed
+	private static double VELOCITY_STEP =Constants.VELOCITY_STEP; //TODO: this constant needs to be sued in later version
+													//eg: velocity & angle
 	
-    private int x = (int) ((Math.random() * 100.0) + 100.0); // TODO: the ball is not randomly 
+/*    private int x = (int) ((Math.random() * 100.0) + 100.0); // TODO: the ball is not randomly 
 															// generated on the screen
     private int y = (int) ((Math.random() * 100.0) + 100.0);
 
     //the horizontal velocity
     private int vx = (int) ((Math.random() * VELOCITY_STEP) + VELOCITY_STEP);
     //the vertical velocity
-    private int vy = (int) ((Math.random() * VELOCITY_STEP) + VELOCITY_STEP);
+    private int vy = (int) ((Math.random() * VELOCITY_STEP) + VELOCITY_STEP);*/
+	
+	//for testing purposes
+	private int x = 600;
+	private int y = 600;
+	private int vx = -20;
+	private int vy = -40;
+	public static int counter=0;
 
-    private int radius = 8;//radius of the ball
+    private int radius = Constants.RADIUS;//radius of the ball
     private Color color = new Color(0,0,205);
 
     // Keep track of the animation window that will be drawing this ball.
@@ -36,8 +45,21 @@ public class BouncingBall {
      * walls cause the ball to change direction.
      */
     public void move() {
+    	//friction: applied every 500 ms
+    	if(counter++ ==50){
+    		if(vx==0){
+    			//do nothing
+    		}else if(vx<0){
+    			vx+=1;
+    		}else{
+    			vx-=1;
+    		}
+    		counter=1;
+    	}
 
-        x += vx;
+    	System.out.println(counter);
+
+    	x += vx;
         if (x <= radius) {
             x = radius;
             vx = -vx;
@@ -47,14 +69,20 @@ public class BouncingBall {
             vx = -vx;
         }
 
+        //change in vertical velocity
+        vy = (int)(vy + Constants.GRAVITATIONAL_CONSTANT);
+        
+        //change in vertical distance   
         y += vy;
         if (y <= radius) {
+        	//touch up
             y = radius;
-            vy = -vy;
+            vy = -vy-1;
         }
         if (y >= window.getHeight() - radius) {
+        	//touch down
             y = window.getHeight() - radius;
-            vy = -vy;
+            vy = -vy+1;
         }
     }
     

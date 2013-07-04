@@ -23,14 +23,17 @@ import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+
+import system.Constants;
+
 import java.awt.GridBagLayout;
 
 
 public class Gizmoball extends JFrame{	
     private static final long serialVersionUID = 3257563992905298229L;
-	public static final int WIDTH = 160;
-	public static final int HEIGHT = WIDTH;
-	public static final int SCALE = 4;//scale factor for the window size
+	public static final int WIDTH = Constants.WIDTH;
+	public static final int HEIGHT = Constants.HEIGHT;
+	public static final int SCALE = Constants.SCALE;//scale factor for the window size
 									// we can set based on our own need
 	private static final boolean GAME_MODE = false;
 	private static final boolean BUILD_MODE = true;
