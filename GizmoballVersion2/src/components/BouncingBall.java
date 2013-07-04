@@ -45,8 +45,8 @@ public class BouncingBall {
      * walls cause the ball to change direction.
      */
     public void move() {
-    	//friction: applied every 500 ms
-    	if(counter++ ==50){
+    	//friction: applied every 1s
+    	if(counter++ ==100){
     		if(vx==0){
     			//do nothing
     		}else if(vx<0){
@@ -54,10 +54,18 @@ public class BouncingBall {
     		}else{
     			vx-=1;
     		}
+    		
+    		if(vy==0){
+    			//do nothing
+    		}else if(vy<0){
+    			vy+=1;
+    		}else{
+    			vy-=1;
+    		}
     		counter=1;
     	}
 
-    	System.out.println(counter);
+   // 	System.out.println(counter);
 
     	x += vx;
         if (x <= radius) {
