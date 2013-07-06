@@ -29,8 +29,57 @@
     //     in other programs it might do something else, including request a
     //     repaint operation).
     //
+	// During building mode, Gizmos should "snap" to a 1 L by 1 L grid
 
+
+/*Building Mode:
+ * Add any of the available types of gizmos to the playing area.
+An attempt to place a gizmo in such a way that it overlaps a previously placed gizmo or the boundary of the playing area should be rejected (i.e., it should have no effect).
+Move a gizmo from one place to another on the playing area.
+An attempt to place a gizmo in such a way that it overlaps a previously placed gizmo or the boundary of the playing area should be rejected (i.e., it should have no effect).
+Apply a 90 degree clockwise rotation to any gizmo.
+Rotation has no effect on gizmos with rotational symmetry. For example, circular bumpers look and act the same, no matter how many times they have been rotated by 90 degrees.
+Connect a particular gizmo's trigger to a particular gizmo's action.
+The standard gizmos produce a trigger when hit by the ball, and exhibit at most one action (for example, moving a flipper, shooting the ball out of an absorber, or changing the color of a bumper). The trigger that a gizmo produces can be connected to the actions of many gizmos. Likewise, a gizmo's action can be activated by many triggers. The required triggers and actions for the basic gizmos are described below.
+Note that triggers do not "chain". That is, when A is connected to B and B is connected to C, a ball hitting A should only cause the action of B to be triggered.
+Connect a key-press trigger to the action of a gizmo.
+Each keyboard key generates a unique trigger when pressed. As with gizmo-generated triggers, key-press triggers can also be connected to the actions of many gizmos.
+Delete a gizmo from the playing area.
+Add a ball to the playing area.
+The user should be able to specify a position and velocity.
+An attempt to place the ball in such a way that it overlaps a previously placed gizmo or the boundary of the playing area should be rejected (i.e., it should have no effect). There is one exception in the standard gizmo set: a stationary ball may be placed inside an absorber.
+Save to a file named by the user.
+You must be able to save to a file in the standard format given in Appendix 2. You may, if you wish, define an extension to the standard format that handles special features of your implementation. If you do so, the user must have the choice of saving in the standard format or in your special format.
+The saved file must include information about all the gizmos currently in the playing area, all of the connections between triggers and actions, and the current position and velocity of the ball.
+Load from a file named by the user. You must be able to load a game saved in the standard format.
+Switch to running mode.
+Quit the application.
+ * */
+
+/*Game Mode:
+ * Press keys, thereby generating triggers that may be connected to the actions of gizmos.
+Switch to building mode at any time.
+If the user requests to switch to building mode while a flipper is in motion, it is acceptable to delay switching until the flipper has reached the end of its trajectory.
+Similar short delays in order to finish transitional states of gizmos you create are also acceptable.
+Quit the application.
+In running mode, Gizmoball should:
+
+Provide visually smooth animation of the motion of the ball.
+The ball by default must have a diameter of approximately 0.5L.
+Ball velocities must range at least from 0.01 L/sec to 200 L/sec and can cover a larger range if you wish. 0 L/sec (stationary) must also be supported.
+An acceptable frame rate should be used to generate a smooth animation. We have found that 20 frames per second tends to work well across a reasonably wide range of platforms.
+Provide intuitively reasonable interactions between the ball and the gizmos in the playing area. That is, the ball should bounce in the direction and with the resulting velocity that you would expect it to bounce in a physical pinball game.
+Continually modify the velocity of the ball to account for the effects of gravity.
+You should support the standard gravity value of 25 L/sec2, which resembles a pinball game with a slightly tilted playing surface.
+Continually modify the velocity of the ball to account for the effects of friction.
+You should model friction by scaling the velocity of the ball using the frictional constants mu and mu2. For sufficiently small delta_t's you can model friction as Vnew = Vold * (1 - mu * delta_t - mu2 * |Vold| * delta_t).
+The default value of mu should be 0.025 per second.
+The default value of mu2 should be 0.025 per L.
+
+ * */
 package app;
+
+import interfaces.gizmosInterface;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -50,6 +99,7 @@ import javax.swing.Timer;
 import system.Constants;
 
 import components.BouncingBall;
+import components.squareBumper;
 
 /*AnimationWindow contains all the oprations for game mode
  * */
@@ -61,15 +111,27 @@ public class AnimationWindow extends JComponent {
 
     private AnimationEventListener eventListener;
     private BouncingBall ball;
+    private squareBumper square;
     private Timer timer;
     private boolean mode;
+    //gizmos is a temp buffer for all the 
+    private gizmosInterface gizmos[];
+    private int gizmoCount=0;//It counts how many Gizmos are currently on the window(ball is not included)
+    	//TODO: Reduce gizmoCount when delete, increase when adding
+        //Node: this variable can be used in update()
 
     //Constructor:
     public AnimationWindow(){
-        //super(); // do the standard JPanel setup stuff
+    	gizmos =new 
+        		gizmosInterface[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
         
-        ball = new BouncingBall(this);
-
+    	ball = new BouncingBall(this);
+    	square = new squareBumper(16*Constants.L,0); this.addGizmos(square);
+    	square = new squareBumper(17*Constants.L,0); this.addGizmos(square);
+    	square = new squareBumper(18*Constants.L,0); this.addGizmos(square);
+    	square = new squareBumper(19*Constants.L,0); this.addGizmos(square);
+    	square = new squareBumper(19*Constants.L,19*Constants.L); this.addGizmos(square);
+       
         // this only initializes the timer, we actually start and stop the
         // timer in the setMode() method
         eventListener = new AnimationEventListener();
@@ -89,9 +151,12 @@ public class AnimationWindow extends JComponent {
     @Override public void paintComponent(Graphics g) {
         // first repaint the proper background color (controlled by
         // the windowing system)
-        //super.paintComponent(g);
+        super.paintComponent(g);
         ball.paint(g);
-  
+       // square.paintSquare(g);
+        for(int i=0; i <this.gizmoCount;i++){
+        	gizmos[i].paintComponents(g);
+        }
     }
 
     /**
@@ -151,10 +216,23 @@ public class AnimationWindow extends JComponent {
         }
     }
 
+    //getters:
     public boolean getMode(){
     	return mode;
     }
+    
+    public int getNumberOfGizmos(){
+    	return this.gizmoCount;
+    }
+    
+    public gizmosInterface[] getGizmos(){
+    	return gizmos;
+    }
 
+    public void addGizmos(gizmosInterface gizmo){//TODO: in Gizmoball.java I need to check the gizmoCount
+    									//if no places to place the gizmos I need to show some message
+    	gizmos[this.gizmoCount++] =gizmo;
+    }
     /**
      * Overview: AnimationEventListener is an inner class that 
      * responds to all sorts of external events, and provides the

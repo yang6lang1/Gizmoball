@@ -31,9 +31,9 @@ import java.awt.GridBagLayout;
 
 public class Gizmoball extends JFrame{	
     private static final long serialVersionUID = 3257563992905298229L;
-	public static final int WIDTH = Constants.WIDTH;
-	public static final int HEIGHT = Constants.HEIGHT;
-	public static final int SCALE = Constants.SCALE;//scale factor for the window size
+	public static final int width = Constants.WIDTH;
+	public static final int height = Constants.HEIGHT;
+	public static final int scale = Constants.SCALE;//scale factor for the window size
 									// we can set based on our own need
 	private static final boolean GAME_MODE = false;
 	private static final boolean BUILD_MODE = true;
@@ -59,17 +59,17 @@ public class Gizmoball extends JFrame{
         JPanel contentPane = new JPanel();
         setContentPane(contentPane);
         contentPane.setBackground(Color.BLACK);
-        contentPane.setBounds(0, 0, (WIDTH/4)*SCALE*2+WIDTH*SCALE, WIDTH*SCALE);
+        contentPane.setBounds(0, 0, (width/4)*scale*2+width*scale, width*scale);
         contentPane.setBorder(BorderFactory.createLineBorder(Color.black));
         contentPane.setLayout(null);
  
         //Create the animation area used for output.
         animationWindow = new AnimationWindow();
-        animationWindow.setBounds(160, 0, 640, 640);
+        animationWindow.setBounds(160, 0, width*scale, width*scale);
         animationWindow.setOpaque(false);
         
         JPanel gridPanel = new JPanel();
-        gridPanel.setBounds(0, 0, 640, 640);
+        gridPanel.setBounds(0, 0, width*scale, width*scale);
         gridPanel.setOpaque(false);
         animationWindow.add(gridPanel);
         GridBagLayout gbl_gridPanel = new GridBagLayout();
@@ -99,7 +99,7 @@ public class Gizmoball extends JFrame{
         //Create the gameToolBar.(the one on the left)
         JToolBar gameToolBar = new JToolBar();
         gameToolBar.setLayout(null);
-        gameToolBar.setBounds(0, 0, 160, 640);
+        gameToolBar.setBounds(0, 0, 160, width*scale);
         gameToolBar.setForeground(Color.GRAY);        
         gameToolBar.setOrientation(SwingConstants.VERTICAL);
         gameToolBar.setFloatable(false);
@@ -127,7 +127,7 @@ public class Gizmoball extends JFrame{
     public JToolBar setBuildToolBar(){
         //Create the gameToolBar.(the one on the left)
         JToolBar buildToolBar = new JToolBar();
-        buildToolBar.setBounds(800, 0, 160, 640);
+        buildToolBar.setBounds(800, 0, 160, width*scale);
         buildToolBar.setForeground(Color.GRAY);        
         buildToolBar.setOrientation(SwingConstants.VERTICAL);
         addButtonsToBuildToolBar(buildToolBar);
@@ -235,7 +235,7 @@ public class Gizmoball extends JFrame{
           "Credits");
         helpMenu.add(menuItem);
 
-        menuBar.setPreferredSize(new Dimension((WIDTH/4)*SCALE*2+WIDTH*SCALE, 22));
+        menuBar.setPreferredSize(new Dimension((width/4)*scale*2+width*scale, 22));
         menuBar.setBackground(Color.GRAY);
         
         return menuBar;
@@ -369,7 +369,7 @@ public class Gizmoball extends JFrame{
 	    frame.setJMenuBar(menubar);
         // the following code realizes the top level application window
        // frame.pack();
-		frame.setBounds(0, 0, WIDTH*SCALE+(WIDTH/4)*SCALE*2, WIDTH*SCALE+22*2);
+		frame.setBounds(0, 0, width*scale+(width/4)*scale*2, width*scale+22*2);
         frame.setResizable(false);
         frame.setVisible(true);
     }
