@@ -19,22 +19,20 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import system.Constants;
 
-import java.awt.GridBagLayout;
-
 
 public class Gizmoball extends JFrame{	
     private static final long serialVersionUID = 3257563992905298229L;
-	public static final int width = Constants.WIDTH;
-	public static final int height = Constants.HEIGHT;
-	public static final int scale = Constants.SCALE;//scale factor for the window size
+	private static final int width = Constants.WIDTH;
+	private static final int height = Constants.HEIGHT;
+	private static final int scale = Constants.SCALE;//scale factor for the window size
 									// we can set based on our own need
+	private static final int screenSize = width*scale;
 	private static final boolean GAME_MODE = false;
 	private static final boolean BUILD_MODE = true;
 	private boolean mode = GAME_MODE; //0 - Game mode, 1 - Build modes
@@ -59,25 +57,14 @@ public class Gizmoball extends JFrame{
         JPanel contentPane = new JPanel();
         setContentPane(contentPane);
         contentPane.setBackground(Color.BLACK);
-        contentPane.setBounds(0, 0, (width/4)*scale*2+width*scale, width*scale);
+        contentPane.setBounds(0, 0, (width/4)*scale*2+width*scale, height*scale);
         contentPane.setBorder(BorderFactory.createLineBorder(Color.black));
         contentPane.setLayout(null);
  
         //Create the animation area used for output.
         animationWindow = new AnimationWindow();
-        animationWindow.setBounds(160, 0, width*scale, width*scale);
-        animationWindow.setOpaque(false);
-        
-        JPanel gridPanel = new JPanel();
-        gridPanel.setBounds(0, 0, width*scale, width*scale);
-        gridPanel.setOpaque(false);
-        animationWindow.add(gridPanel);
-        GridBagLayout gbl_gridPanel = new GridBagLayout();
-        gbl_gridPanel.columnWidths = new int[]{0};
-        gbl_gridPanel.rowHeights = new int[]{0};
-        gbl_gridPanel.columnWeights = new double[]{Double.MIN_VALUE};
-        gbl_gridPanel.rowWeights = new double[]{Double.MIN_VALUE};
-        gridPanel.setLayout(gbl_gridPanel);
+        animationWindow.setBounds((width/4)*scale, 0, width*scale, height*scale);
+        animationWindow.setGridInvisible();
         contentPane.add(animationWindow); 
     
         JToolBar gameToolBar = new JToolBar();
@@ -85,7 +72,6 @@ public class Gizmoball extends JFrame{
         contentPane.add(gameToolBar);
         
         JToolBar buildToolBar = new JToolBar();
-        buildToolBar.setLayout(null);
         buildToolBar=this.setBuildToolBar();
         contentPane.add(buildToolBar);
         }
@@ -99,14 +85,14 @@ public class Gizmoball extends JFrame{
         //Create the gameToolBar.(the one on the left)
         JToolBar gameToolBar = new JToolBar();
         gameToolBar.setLayout(null);
-        gameToolBar.setBounds(0, 0, 160, width*scale);
+        gameToolBar.setBounds(0, 0, (width/4)*scale, height*scale);
         gameToolBar.setForeground(Color.GRAY);        
         gameToolBar.setOrientation(SwingConstants.VERTICAL);
         gameToolBar.setFloatable(false);
         
         JPanel modePanel = new JPanel();
         modePanel.setLayout(null);
-        modePanel.setBounds(0,0,160,220);
+        modePanel.setBounds(0,0,(width/4)*scale,(int)(height*scale*11/32));
         modePanel.setForeground(Color.GRAY);
         modePanel.setBorder(BorderFactory.createLineBorder(Color.gray));
         modePanel.setOpaque(true);
@@ -114,7 +100,8 @@ public class Gizmoball extends JFrame{
         
         JPanel gameControlPanel = new JPanel();
         gameControlPanel.setLayout(null);
-        gameControlPanel.setBounds(0,220,160,420);
+        gameControlPanel.setBounds(0,(int)(width*scale*11/32)+1,
+        		(width/4)*scale,width*scale-(int)(height*scale*11/32)-1);
         gameControlPanel.setForeground(Color.GRAY);
         gameControlPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
         gameControlPanel.setOpaque(true);
@@ -127,13 +114,31 @@ public class Gizmoball extends JFrame{
     public JToolBar setBuildToolBar(){
         //Create the gameToolBar.(the one on the left)
         JToolBar buildToolBar = new JToolBar();
-        buildToolBar.setBounds(800, 0, 160, width*scale);
+        buildToolBar.setLayout(null);
+        buildToolBar.setBounds(width*scale+(width/4)*scale, 0, (width/4)*scale, width*scale);
         buildToolBar.setForeground(Color.GRAY);        
         buildToolBar.setOrientation(SwingConstants.VERTICAL);
-        addButtonsToBuildToolBar(buildToolBar);
         buildToolBar.setFloatable(false);
-//        buildToolBar.setBorder(BorderFactory.createLineBorder(Color.black));
         
+        JPanel gizmoPanel = new JPanel();
+        gizmoPanel.setLayout(null);
+        gizmoPanel.setBounds(0,0,(width/4)*scale,(int)(height*scale*23/64));
+        gizmoPanel.setForeground(Color.GRAY);
+        gizmoPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
+        gizmoPanel.setOpaque(true);
+        buildToolBar.add(gizmoPanel);
+
+        JPanel gizmoControlPanel = new JPanel();
+        gizmoControlPanel.setLayout(null);
+        gizmoControlPanel.setBounds(0,(int)(width*scale*23/64)+1,
+        		(width/4)*scale,width*scale-(int)(height*scale*23/64)-1);
+        gizmoControlPanel.setForeground(Color.GRAY);
+        gizmoControlPanel.setBorder(BorderFactory.createLineBorder(Color.gray));
+        gizmoControlPanel.setOpaque(true);
+        buildToolBar.add(gizmoControlPanel);
+
+        addButtonsToBuildToolBar(buildToolBar,gizmoPanel,gizmoControlPanel);
+
         return buildToolBar;
     }
 
@@ -240,42 +245,27 @@ public class Gizmoball extends JFrame{
         
         return menuBar;
     }
-    /**
-     * @modifies toolBar 
-     * @effects adds Save, Load, Run, Stop and Quit buttons to toolBar
-     * @param toolbar to add buttons to.
-     */
-    protected JButton makeButtonWithImage(String imageName,String toolTipText, String buttonName){
-        //Look for the image.
-        String imgLocation ="res/"+imageName
-                             + ".png";
-        
-        //Create and initialize the button.
-        JButton button = new JButton();
-        //button.setActionCommand(actionCommand);
-        button.setToolTipText(toolTipText);
-        //button.addActionListener(this);
-
-        ImageIcon icon= new ImageIcon(imgLocation);
-        button.setIcon(icon);
-        return button;
-    }
 
     protected void addButtonsToGameToolBar(JToolBar toolBar,JPanel panelOne,JPanel panelTwo){
-    		  
+    	JLabel title = null;
     	JButton button = null;
         ImageIcon icon = null;
         Image image=null;
-       
+   
+        title = new JLabel("  Mode Control: ");
+        title.setBounds(0,0,(width/4)*scale,(int)(width*scale*1/32));
+        panelOne.add(title);
+
         icon = new ImageIcon("res/Game-Icon.png");
-        image=icon.getImage().getScaledInstance(80, 60, 0);
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/8), (int)(height*scale*3/32), 0);
         icon.setImage(image);
         //button = makeButtonWithImage("Game-Icon","Enter the Game Mode","Game");
         button=new JButton("Game Mode",icon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.TOP);
         button.setToolTipText("Game mode");
-        button.setBounds(40, 20, 80, 80);
+        button.setBounds((int)(width*scale*1/16), (int)(width*scale*1/32), 
+        		(int)(width*scale*1/8), (int)(width*scale*1/8));
         // when this button is pushed it enters game mode
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -286,13 +276,14 @@ public class Gizmoball extends JFrame{
         panelOne.add(button);
         
         icon = new ImageIcon("res/Build-Icon.png");
-        image=icon.getImage().getScaledInstance(80, 60, 0);
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/8), (int)(width*scale*3/32), 0);
         icon.setImage(image);
         button=new JButton("Build Mode",icon);
         button.setHorizontalTextPosition(JButton.CENTER);
         button.setVerticalTextPosition(JButton.TOP);
         button.setToolTipText("Build mode");
-        button.setBounds(40, 120, 80, 80);
+        button.setBounds((int)(width*scale*1/16), (int)(width*scale*3/16), 
+        		(int)(width*scale*1/8), (int)(width*scale*1/8));
         // when this button is pushed it enters game mode
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -302,26 +293,32 @@ public class Gizmoball extends JFrame{
         });
         panelOne.add(button);
 
+        title = new JLabel("  Game Control: ");
+        title.setBounds(0,0,(width/4)*scale,(int)(width*scale*1/32));
+        panelTwo.add(title);
+
         icon = new ImageIcon("res/Rewind-Icon.png");
-        image=icon.getImage().getScaledInstance(40, 40, 0);
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16), (int)(width*scale*1/16), 0);
         icon.setImage(image);
         button=new JButton(icon);
         button.setToolTipText("Slow down");
-        button.setBounds(10, 20, 40, 40);
+        button.setBounds((int)(width*scale*1/64), (int)(width*scale*1/32), 
+        		(int)(width*scale*1/16), (int)(width*scale*1/16));
         // when this button is pushed it enters game mode
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO
+            	
             }
         });
         panelTwo.add(button);
 
         icon = new ImageIcon("res/Play-Pause-Icon.png");
-        image=icon.getImage().getScaledInstance(40, 40, 0);
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16), (int)(width*scale*1/16), 0);
         icon.setImage(image);
         button=new JButton(icon);
         button.setToolTipText("Start running");
-        button.setBounds(60, 20, 40, 40);
+        button.setBounds((int)(width*scale*3/32), (int)(width*scale*1/32),
+        		(int)(width*scale*1/16), (int)(width*scale*1/16));
         // when this button is pushed it enters game mode
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -335,11 +332,12 @@ public class Gizmoball extends JFrame{
         panelTwo.add(button);
 
         icon = new ImageIcon("res/Fastforward-Icon.png");
-        image=icon.getImage().getScaledInstance(40, 40, 0);
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16), (int)(width*scale*1/16), 0);
         icon.setImage(image);
         button=new JButton(icon);
         button.setToolTipText("Slow down");
-        button.setBounds(110, 20, 40, 40);
+        button.setBounds((int)(width*scale*11/64), (int)(width*scale*1/32), 
+        		(int)(width*scale*1/16),(int)(width*scale*1/16));
         // when this button is pushed it enters game mode
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -350,14 +348,194 @@ public class Gizmoball extends JFrame{
 
     } 
     
-    protected void addButtonsToBuildToolBar(JToolBar toolBar){
+    protected void addButtonsToBuildToolBar(JToolBar toolBar,JPanel panelOne,JPanel panelTwo){
+ 
+    	JLabel title = null;
+    	JButton button = null;
+        ImageIcon icon = null;
+        Image image=null;
+       
+        title = new JLabel("  Gizmos: ");
+        title.setBounds(0,0,(width/4)*scale,(int)(width*scale*1/32));
+        panelOne.add(title);
+        
+        icon = new ImageIcon("res/Square-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);
+        button=new JButton(icon);
+        button.setToolTipText("Add a square bumper");
+        button.setBounds((int)(width*scale*1/32),(int)(width*scale*1/32),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A square bumper is added");    
+            }
+        });
+        panelOne.add(button);
+
+        icon = new ImageIcon("res/Triangle-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a triangular bumper");
+        button.setBounds((int)(width*scale*9/64),(int)(width*scale*1/32),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A triangular bumper is added");    
+            }
+        });
+        panelOne.add(button);
+        
+        icon = new ImageIcon("res/Circle-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a circular bumper");
+        button.setBounds((int)(width*scale*1/32),(int)(width*scale*9/64),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A circular bumper is added");    
+            }
+        });
+        panelOne.add(button);
+
+        icon = new ImageIcon("res/Bouncing-Ball-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a bouncing ball");
+        button.setBounds((int)(width*scale*9/64),(int)(width*scale*9/64),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A bouncing ball is added");    
+            }
+        });
+        panelOne.add(button);
+  
+        icon = new ImageIcon("res/Left-Flipper-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a left flipper");
+        button.setBounds((int)(width*scale*1/32),(int)(width*scale*1/4),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A left flipper is added");    
+            }
+        });
+        panelOne.add(button);
+
+        icon = new ImageIcon("res/Right-Flipper-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a right flipper");
+        button.setBounds((int)(width*scale*9/64),(int)(width*scale*1/4),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A right flipper is added");    
+            }
+        });
+        panelOne.add(button);
+
+        title = new JLabel("  Gizmo Control: ");
+        title.setBounds(0,0,(width/4)*scale,(int)(width*scale*1/32));
+        panelTwo.add(title);
+ 
+        icon = new ImageIcon("res/Move-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);
+        button=new JButton(icon);
+        button.setToolTipText("<html>Move selected gizmo with keyboard.<br/>Eg: up,down,left,right</html>");
+        button.setBounds((int)(width*scale*1/32),(int)(width*scale*1/32),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: move a gizmo
+            	    
+            }
+        });
+        panelTwo.add(button);
+
+        icon = new ImageIcon("res/Rotate-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a triangular bumper");
+        button.setBounds((int)(width*scale*9/64),(int)(width*scale*1/32),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	    
+            }
+        });
+        panelTwo.add(button);
+        
+        icon = new ImageIcon("res/Delete-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a circular bumper");
+        button.setBounds((int)(width*scale*1/32),(int)(width*scale*9/64),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A circular bumper is added");    
+            }
+        });
+        panelTwo.add(button);
+
+        icon = new ImageIcon("res/Link-Icon.png");
+        image=icon.getImage().getScaledInstance((int)(width*scale*1/16),(int)(width*scale*1/16), 0);
+        icon.setImage(image);     
+        button=new JButton(icon);
+        button.setToolTipText("Add a bouncing ball");
+        button.setBounds((int)(width*scale*9/64),(int)(width*scale*9/64),
+        		(int)(width*scale*5/64),(int)(width*scale*5/64));
+        // when this button is pressed, a square bumper is added to the game board
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	//TODO: add a gizmo
+            	System.out.println("A bouncing ball is added");    
+            }
+        });
+        panelTwo.add(button);
+
     }
   
     protected void setMode(boolean mode){
     	this.mode=mode;
+    	if(mode == GAME_MODE){
+    		animationWindow.setGridInvisible();
+    	}else{
+    		animationWindow.setGridVisible();
+    	}
     }
     
     public static void main(String[] args) {
+    	
         Gizmoball frame = new Gizmoball();
 	    // frame.getContentPane().add(yellowLabel, BorderLayout.CENTER);
 		 

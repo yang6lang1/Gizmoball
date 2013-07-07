@@ -99,7 +99,10 @@ import javax.swing.Timer;
 import system.Constants;
 
 import components.BouncingBall;
+import components.circularBumper;
+import components.gridPanel;
 import components.squareBumper;
+import components.triangularBumper;
 
 /*AnimationWindow contains all the oprations for game mode
  * */
@@ -107,11 +110,13 @@ public class AnimationWindow extends JComponent {
     private static final long serialVersionUID = 3257281448464364082L;
 
     // Controls how often we redraw
-    private static int FRAMES_PER_SECOND = Constants.FRAMES_PER_SECOND;
+    private int FRAMES_PER_SECOND = Constants.FRAMES_PER_SECOND;
 
     private AnimationEventListener eventListener;
+    private int number_of_grids_per_dimension =Constants.number_of_grids_per_dimension;
+    private int gridSize = Constants.WIDTH*Constants.SCALE/number_of_grids_per_dimension;
+    private gridPanel panel = new gridPanel();
     private BouncingBall ball;
-    private squareBumper square;
     private Timer timer;
     private boolean mode;
     //gizmos is a temp buffer for all the 
@@ -126,6 +131,24 @@ public class AnimationWindow extends JComponent {
         		gizmosInterface[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
         
     	ball = new BouncingBall(this);
+    
+    	panel.setBounds(0, 0, Constants.WIDTH*Constants.SCALE, Constants.HEIGHT*Constants.SCALE);
+    	panel.setOpaque(false);
+    	add(panel);
+ 
+        squareBumper square;
+        triangularBumper triangle;
+        circularBumper circle;
+        circle = new circularBumper(8*Constants.L,0); this.addGizmos(circle);
+        circle = new circularBumper(9*Constants.L,0); this.addGizmos(circle);
+        circle = new circularBumper(10*Constants.L,0); this.addGizmos(circle);
+        circle = new circularBumper(11*Constants.L,0); this.addGizmos(circle);
+
+        triangle = new triangularBumper(12*Constants.L,0,0); this.addGizmos(triangle);
+        triangle = new triangularBumper(13*Constants.L,0,90); this.addGizmos(triangle);
+        triangle = new triangularBumper(14*Constants.L,0,180); this.addGizmos(triangle);
+        triangle = new triangularBumper(15*Constants.L,0,270); this.addGizmos(triangle);
+
     	square = new squareBumper(16*Constants.L,0); this.addGizmos(square);
     	square = new squareBumper(17*Constants.L,0); this.addGizmos(square);
     	square = new squareBumper(18*Constants.L,0); this.addGizmos(square);
@@ -140,6 +163,7 @@ public class AnimationWindow extends JComponent {
         // should call us back. Ps: 1000ms
         timer = new Timer(1000 / FRAMES_PER_SECOND, eventListener);
         mode = false;
+       
         this.setBorder(BorderFactory.createLineBorder(Color.black));
     }
     
@@ -216,6 +240,17 @@ public class AnimationWindow extends JComponent {
         }
     }
 
+    public void setGridInvisible(){
+    	this.panel.setVisible(false);
+    }
+
+    public void setGridVisible(){
+    	this.panel.setVisible(true);
+    }
+
+    public void setFPS(int fps){
+    	this.FRAMES_PER_SECOND = fps;
+    }
     //getters:
     public boolean getMode(){
     	return mode;
@@ -227,6 +262,10 @@ public class AnimationWindow extends JComponent {
     
     public gizmosInterface[] getGizmos(){
     	return gizmos;
+    }
+    
+    public int getFPS(){
+    	return this.FRAMES_PER_SECOND;
     }
 
     public void addGizmos(gizmosInterface gizmo){//TODO: in Gizmoball.java I need to check the gizmoCount

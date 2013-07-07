@@ -21,6 +21,7 @@ public class squareBumper extends JComponent implements gizmosInterface{
     private double SquareCOR = Constants.SquareCOR;//coefficient of reflect
     private boolean trigger = false;
     private char type;
+    private int resetTime = 10;//ms
     
     public squareBumper(){
     	this(ORIGINAL_X,ORIGINAL_Y);
@@ -72,9 +73,10 @@ public class squareBumper extends JComponent implements gizmosInterface{
     }
     
     public void paintComponents(Graphics g){
+    	
         g.setColor(Color.RED);
         g.fillRect(x,y,edgeLength,edgeLength);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.RED);
         g.drawRect(x,y,edgeLength,edgeLength);  
     }
 }

@@ -34,8 +34,9 @@ public class BouncingBall {
 	private int y = 300;
 	private int vx =(int)(speed*angle.cos());
 	private int vy = (int)(speed*angle.sin());
-	public int counter=0;
-	public int counter2=0;
+	private int counter=0;
+	private int counter2=0;
+	private double[] timeForCollision;	
 
 
     private int radius = Constants.RADIUS;//radius of the ball
@@ -47,6 +48,7 @@ public class BouncingBall {
     //Constructor:
     public BouncingBall(AnimationWindow win) {
         this.window = win;
+        timeForCollision = new double[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
         counter = 0;
         counter2 = 0;
     }
@@ -117,59 +119,16 @@ public class BouncingBall {
         }
         
         //collide with Gizmos:
-        LineSegment top,bottom,left,right;
         Circle ball=new Circle(x,y,radius);
         Vect velocity= new Vect(vx,vy);
         gizmosInterface[] gizmos = this.window.getGizmos();        
 
-        for(int i = 0; i<this.window.getNumberOfGizmos();i++){
+        
+       /* for(int i = 0; i<this.window.getNumberOfGizmos();i++){
         	switch (gizmos[i].getType()){
         	case 'S'://if it is a squareBumper: 4 sides
-        		gizmos[i]=(squareBumper)gizmos[i];
-        		//top:(x1,y1,  x1+E,y1)
-        		top = new LineSegment(((squareBumper)gizmos[i]).getX(),
-        							   ((squareBumper)gizmos[i]).getY(),
-        							   ((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge(),
-        							   ((squareBumper)gizmos[i]).getX());
-        		//bottom:(x1,y1+E,  x1+E,y1+E)
-        		bottom = new LineSegment(((squareBumper)gizmos[i]).getX(),
-						   ((squareBumper)gizmos[i]).getY()+((squareBumper)gizmos[i]).getEdge(),
-						   ((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge(),
-						   ((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge());
-        		//left:(x1,y1,  x1,y1+E)
-        		left = new LineSegment(((squareBumper)gizmos[i]).getX(),
-						   ((squareBumper)gizmos[i]).getY(),
-						   ((squareBumper)gizmos[i]).getX(),
-						   ((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge());
-        		//left:(x1+E,y1,  x1+E,y1+E)
-        		right = new LineSegment(((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge(),
-						   ((squareBumper)gizmos[i]).getY(),
-						   ((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge(),
-						   ((squareBumper)gizmos[i]).getX()+((squareBumper)gizmos[i]).getEdge());
-        		//ball = new Circle(x,y,radius);
-        		//velocity = new Vect(vx,vy);
-
-                if(Geometry.timeUntilWallCollision(top, ball, velocity)==0){
-                	//ready to collide
-                	System.out.println("Collide with top side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-                	velocity = Geometry.reflectWall(top, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-                	
-                }else if(Geometry.timeUntilWallCollision(bottom, ball, velocity)==0){
-                	System.out.println("Collide with bottom side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-                	velocity = Geometry.reflectWall(bottom, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-                	
-                }else if(Geometry.timeUntilWallCollision(left, ball, velocity)==delta_t){
-                	System.out.println("Collide with left side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-                	velocity = Geometry.reflectWall(left, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-                	
-                }else if(Geometry.timeUntilWallCollision(right, ball, velocity)==delta_t){
-                	System.out.println("Collide with right side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-                	velocity = Geometry.reflectWall(right, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-                	
-                }else{}
-                
-                //special case:
-                
+        		timeForCollision[i]=findMinTimeSquare(i,ball,velocity);
+        		System.out.println("Time for collision with ball "+i+" is: "+timeForCollision);
         		break;
         	default:
         		break;
@@ -183,7 +142,7 @@ public class BouncingBall {
            	vy = (int)(speed*angle.sin());
 
             	
-        }
+        }*/
 		
 
         
@@ -269,11 +228,9 @@ public class BouncingBall {
     }
 
 
-    private double findMinTimeSquare(gizmosInterface square,int i){
+    private double findMinTimeSquare(int i,Circle ball,Vect velocity){
         //collide with Gizmos:
         LineSegment top,bottom,left,right;
-        Circle ball=new Circle(x,y,radius);
-        Vect velocity= new Vect(vx,vy);
         gizmosInterface[] gizmos = this.window.getGizmos(); 
         double minTime;
 
@@ -301,27 +258,17 @@ public class BouncingBall {
 	//ball = new Circle(x,y,radius);
 	//velocity = new Vect(vx,vy);
 
-    if(Geometry.timeUntilWallCollision(top, ball, velocity)==0){
-    	//ready to collide
-    	System.out.println("Collide with top side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-    	velocity = Geometry.reflectWall(top, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-    	
-    }else if(Geometry.timeUntilWallCollision(bottom, ball, velocity)==0){
-    	System.out.println("Collide with bottom side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-    	velocity = Geometry.reflectWall(bottom, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-    	
-    }else if(Geometry.timeUntilWallCollision(left, ball, velocity)==delta_t){
-    	System.out.println("Collide with left side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-    	velocity = Geometry.reflectWall(left, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-    	
-    }else if(Geometry.timeUntilWallCollision(right, ball, velocity)==delta_t){
-    	System.out.println("Collide with right side of squareBumper at: ("+((squareBumper)gizmos[i]).getX()+" "+((squareBumper)gizmos[i]).getY()+")");
-    	velocity = Geometry.reflectWall(right, velocity, ((squareBumper)gizmos[i]).getSquareCOR());
-    	
-    }else{}
-    
-    //special case:
-
+	minTime = Geometry.timeUntilWallCollision(top, ball, velocity);
+	if(minTime >=Geometry.timeUntilWallCollision(bottom, ball, velocity)){
+		minTime = Geometry.timeUntilWallCollision(bottom, ball, velocity);
+	}
+	if(minTime>=Geometry.timeUntilWallCollision(left, ball, velocity)){
+		minTime = Geometry.timeUntilWallCollision(left, ball, velocity);
+	}
+	if(minTime>= Geometry.timeUntilWallCollision(right, ball, velocity)){
+		minTime = Geometry.timeUntilWallCollision(right, ball, velocity);
+	}
+	return minTime;
     }
 	
 }
