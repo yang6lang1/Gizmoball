@@ -56,11 +56,8 @@ public class squareBumper extends JComponent implements gizmosInterface{
     	return trigger;
     }
     
-    public void setX(int x){
+    public void setLocation(int x, int y){
     	this.x = x;
-    }
-    
-    public void setY(int y){
     	this.y = y;
     }
     

@@ -138,29 +138,11 @@ public class AnimationWindow extends JComponent {
     	for(int row=0;row<Constants.number_of_grids_per_dimension;row++){
     		for(int col=0;col<Constants.number_of_grids_per_dimension;col++){
     			element[col][row] = new gridElement(col*gridSize,row*gridSize,null);
-    			System.out.println(element[col][row].toString());
+    			//System.out.println(element[col][row].toString());
     		}
     	}
  
-        squareBumper square;
-        triangularBumper triangle;
-        circularBumper circle;
-        circle = new circularBumper(8*Constants.L,0); this.addGizmos(circle);
-        circle = new circularBumper(9*Constants.L,0); this.addGizmos(circle);
-        circle = new circularBumper(10*Constants.L,0); this.addGizmos(circle);
-        circle = new circularBumper(11*Constants.L,0); this.addGizmos(circle);
 
-        triangle = new triangularBumper(12*Constants.L,0,0); this.addGizmos(triangle);
-        triangle = new triangularBumper(13*Constants.L,0,90); this.addGizmos(triangle);
-        triangle = new triangularBumper(14*Constants.L,0,180); this.addGizmos(triangle);
-        triangle = new triangularBumper(15*Constants.L,0,270); this.addGizmos(triangle);
-
-    	square = new squareBumper(16*Constants.L,0); this.addGizmos(square);
-    	square = new squareBumper(17*Constants.L,0); this.addGizmos(square);
-    	square = new squareBumper(18*Constants.L,0); this.addGizmos(square);
-    	square = new squareBumper(19*Constants.L,0); this.addGizmos(square);
-    	square = new squareBumper(19*Constants.L,19*Constants.L); this.addGizmos(square);
-       
         // this only initializes the timer, we actually start and stop the
         // timer in the setMode() method
         eventListener = new AnimationEventListener();
@@ -183,10 +165,16 @@ public class AnimationWindow extends JComponent {
         // the windowing system)
         super.paintComponent(g);
         ball.paint(g);
-       // square.paintSquare(g);
-        for(int i=0; i <this.gizmoCount;i++){
+    	for(int row=0;row<Constants.number_of_grids_per_dimension;row++){
+    		for(int col=0;col<Constants.number_of_grids_per_dimension;col++){
+    			if(element[col][row].getElement() !=null){
+    				element[col][row].getElement().paintComponents(g);
+    			}
+    		}
+    	}
+  /*      for(int i=0; i <this.gizmoCount;i++){
         	gizmos[i].paintComponents(g);
-        }
+        }*/
     }
 
     /**
@@ -277,6 +265,24 @@ public class AnimationWindow extends JComponent {
     public void addGizmos(gizmosInterface gizmo){//TODO: in Gizmoball.java I need to check the gizmoCount
     									//if no places to place the gizmos I need to show some message
     	gizmos[this.gizmoCount++] =gizmo;
+    	int row=0,col = 0;
+    	boolean hasElement = element[col][row].hasElement();// try to insert into (0,0)
+
+    	for(row = 0;row<Constants.number_of_grids_per_dimension&& hasElement == true;row++){	
+    		for(col = 0;col<Constants.number_of_grids_per_dimension&& hasElement == true;col++){
+	    			//col++;
+	    			hasElement = element[col][row].hasElement();	
+	    			if(!hasElement){
+	    				break;
+	    			}
+	    	}
+			if(!hasElement){
+				break;
+			}
+    	}
+
+    	gizmo.setLocation(col*gridSize, row*gridSize);
+    	element[col][row].setElement(gizmo);
     }
     /**
      * Overview: AnimationEventListener is an inner class that 

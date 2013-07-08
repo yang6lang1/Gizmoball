@@ -25,6 +25,10 @@ import javax.swing.SwingConstants;
 
 import system.Constants;
 
+import components.circularBumper;
+import components.squareBumper;
+import components.triangularBumper;
+
 
 public class Gizmoball extends JFrame{	
     private static final long serialVersionUID = 3257563992905298229L;
@@ -369,8 +373,8 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
-            	System.out.println("A square bumper is added");    
+            	animationWindow.addGizmos(new squareBumper());
+            	animationWindow.repaint();    
             }
         });
         panelOne.add(button);
@@ -385,8 +389,8 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
-            	System.out.println("A triangular bumper is added");    
+            	animationWindow.addGizmos(new triangularBumper());
+            	animationWindow.repaint();    
             }
         });
         panelOne.add(button);
@@ -401,8 +405,8 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
-            	System.out.println("A circular bumper is added");    
+            	animationWindow.addGizmos(new circularBumper());
+            	animationWindow.repaint();    
             }
         });
         panelOne.add(button);
@@ -417,7 +421,7 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
+            	//TODO: call a menu: ask the user where to put the bouncing ball
             	System.out.println("A bouncing ball is added");    
             }
         });

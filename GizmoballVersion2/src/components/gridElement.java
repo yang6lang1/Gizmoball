@@ -50,6 +50,10 @@ public class gridElement {
 		}
 	}
 	
+	public void setStatus(boolean hasElement){
+		this.hasElement = hasElement;
+	}
+	
 	public String toString(){
 		String out = new String("x position: "+x+ " y position: "+y);
 		return out;
