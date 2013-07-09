@@ -78,9 +78,9 @@ public class circularBumper extends JComponent implements gizmosInterface{
     
     public void paintComponents(Graphics g){
     	
-        g.setColor(Color.ORANGE);
+        g.setColor(Constants.colorOfCircularBumper);
         g.fillOval(x, y, radius+radius, radius+radius);
-        g.setColor(Color.ORANGE);
+        g.setColor(Constants.colorOfCircularBumper);
         g.drawOval(x, y, radius+radius, radius+radius);  
 //        g.setColor(Color.green);
 //        g.fillRoundRect(x, y+2*Constants.L, radius, 2*Constants.L,(int)(radius),(int)(radius));

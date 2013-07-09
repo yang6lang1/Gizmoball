@@ -113,9 +113,9 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
 			break;
 		}
     	
-        g.setColor(Color.YELLOW);
+        g.setColor(Constants.colorOfTriangularBumper);
         g.fillPolygon(xPoints, yPoints, 3);
-        g.setColor(Color.YELLOW);
+        g.setColor(Constants.colorOfTriangularBumper);
         g.drawPolygon(xPoints, yPoints, 3);  
     }
 

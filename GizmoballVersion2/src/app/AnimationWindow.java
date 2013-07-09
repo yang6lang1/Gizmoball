@@ -99,11 +99,7 @@ import javax.swing.Timer;
 import system.Constants;
 
 import components.BouncingBall;
-import components.circularBumper;
 import components.gridElement;
-import components.gridPanel;
-import components.squareBumper;
-import components.triangularBumper;
 
 /*AnimationWindow contains all the oprations for game mode
  * */
@@ -132,7 +128,8 @@ public class AnimationWindow extends JComponent {
         		gizmosInterface[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
     	ball = new BouncingBall(this);
     	panel.setBounds(0, 0, Constants.WIDTH*Constants.SCALE, Constants.HEIGHT*Constants.SCALE);
-    	panel.setOpaque(false);
+    	panel.setOpaque(true);
+    	panel.setBackground(Color.black);
     	add(panel);
     	element = new gridElement[Constants.number_of_grids_per_dimension][Constants.number_of_grids_per_dimension];
     	for(int row=0;row<Constants.number_of_grids_per_dimension;row++){
@@ -245,13 +242,26 @@ public class AnimationWindow extends JComponent {
     public void setFPS(int fps){
     	this.FRAMES_PER_SECOND = fps;
     }
+
+    public void setElement(gridElement[][] element){
+    	this.element = element;
+    }
+    
     //getters:
-    public boolean getMode(){
+    public gridElement[][] getElement(){
+    	return element;
+    }
+    
+   public boolean getMode(){
     	return mode;
     }
     
     public int getNumberOfGizmos(){
     	return this.gizmoCount;
+    }
+    
+    public gridPanel getGridPanel(){
+    	return this.panel;
     }
     
     public gizmosInterface[] getGizmos(){
@@ -282,8 +292,14 @@ public class AnimationWindow extends JComponent {
     	}
 
     	gizmo.setLocation(col*gridSize, row*gridSize);
-    	element[col][row].setElement(gizmo);
+    	try{
+    		element[col][row].setElement(gizmo);
+    	}catch(ArrayIndexOutOfBoundsException e){
+    		//TODO: Screen is full! Show an alert!
+    	}
     }
+    
+    
     /**
      * Overview: AnimationEventListener is an inner class that 
      * responds to all sorts of external events, and provides the

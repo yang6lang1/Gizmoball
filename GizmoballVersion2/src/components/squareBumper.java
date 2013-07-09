@@ -71,9 +71,9 @@ public class squareBumper extends JComponent implements gizmosInterface{
     
     public void paintComponents(Graphics g){
     	
-        g.setColor(Color.RED);
+        g.setColor(Constants.colorOfSquareBumper);
         g.fillRect(x,y,edgeLength,edgeLength);
-        g.setColor(Color.RED);
+        g.setColor(Constants.colorOfSquareBumper);
         g.drawRect(x,y,edgeLength,edgeLength);  
     }
 }

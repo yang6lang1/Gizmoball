@@ -1,5 +1,7 @@
 package system;
 
+import java.awt.Color;
+
 import physics.Angle;
 
 public class Constants {
@@ -7,6 +9,12 @@ public class Constants {
 	public static final int FRAMES_PER_SECOND = 40;
 	public static final int FRAME_REDRAW= 1000/FRAMES_PER_SECOND;//ms
 
+	//gridPanel:
+	public static final Color colorOfGridLine = Color.orange;
+	public enum SelectionType {
+	    NONE, SELECTED, MOVESELETED, CONNECTSELETED	    
+	}
+	
 	//Application window
 	//The playing area must be at least 20 L wide by 20 L high
 	public static final int WIDTH = 160;
@@ -35,11 +43,13 @@ public class Constants {
 	//Square bumper
 	//coefficient of reflection
 	public static final double SquareCOR =1.0;
+	public static final Color colorOfSquareBumper = Color.blue;
 	
 	//triangular bumper
 	public static final double TriangleCOR =1.0;
+	public static final Color colorOfTriangularBumper = Color.green;
 	
 	//circular bumper
 	public static final double CircleCOR =1.0;
-	
+	public static final Color colorOfCircularBumper = Color.yellow;
 }

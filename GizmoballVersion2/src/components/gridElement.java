@@ -26,7 +26,7 @@ public class gridElement {
 	}
 	
 	//getters
-	public int[] getPosition(){
+	public int[] getLocation(){
 		int[] position = new int[2];
 		position[0]= x; position[1]=y;
 		return position;
