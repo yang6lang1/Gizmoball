@@ -100,6 +100,7 @@ import system.Constants;
 
 import components.BouncingBall;
 import components.circularBumper;
+import components.gridElement;
 import components.gridPanel;
 import components.squareBumper;
 import components.triangularBumper;
@@ -119,8 +120,8 @@ public class AnimationWindow extends JComponent {
     private BouncingBall ball;
     private Timer timer;
     private boolean mode;
-    //gizmos is a temp buffer for all the 
-    private gizmosInterface gizmos[];
+    private gizmosInterface gizmos[]; //gizmos is a collection of all the Gizmos on the screen
+    private gridElement element[][];  //element is the collection of all the grid elements (20*20)
     private int gizmoCount=0;//It counts how many Gizmos are currently on the window(ball is not included)
     	//TODO: Reduce gizmoCount when delete, increase when adding
         //Node: this variable can be used in update()
@@ -129,12 +130,17 @@ public class AnimationWindow extends JComponent {
     public AnimationWindow(){
     	gizmos =new 
         		gizmosInterface[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
-        
     	ball = new BouncingBall(this);
-    
     	panel.setBounds(0, 0, Constants.WIDTH*Constants.SCALE, Constants.HEIGHT*Constants.SCALE);
     	panel.setOpaque(false);
     	add(panel);
+    	element = new gridElement[Constants.number_of_grids_per_dimension][Constants.number_of_grids_per_dimension];
+    	for(int row=0;row<Constants.number_of_grids_per_dimension;row++){
+    		for(int col=0;col<Constants.number_of_grids_per_dimension;col++){
+    			element[col][row] = new gridElement(col*gridSize,row*gridSize,null);
+    			System.out.println(element[col][row].toString());
+    		}
+    	}
  
         squareBumper square;
         triangularBumper triangle;
