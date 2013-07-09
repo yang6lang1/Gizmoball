@@ -300,8 +300,7 @@ public class AnimationWindow extends JComponent {
     }
     
     public void restartGame(){
-    	this.ball.setSpeed(Constants.SPEED);
-    	this.ball.setAngle(Constants.ANGLE);
+    	this.ball = new BouncingBall(this);
     }
     
     /**

@@ -50,10 +50,19 @@ public class BouncingBall {
     public BouncingBall(AnimationWindow win) {
         this.window = win;
         timeForCollision = new double[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
-        counter = 0;
-        counter2 = 0;
+    	speed =Constants.SPEED; //TODO: this constant needs to be sued in later version
+    	angle = Constants.ANGLE;			  //eg: velocity & angle
+
+    	vx =(int)(speed*angle.cos());
+    	vy = (int)(speed*angle.sin());
+
     }
 
+    public void setLocation(int x, int y){
+    	this.x = x;
+    	this.y = y;
+    }
+    
     public void setSpeed(double speed){
     	this.speed = speed;
     }

@@ -534,6 +534,7 @@ public class Gizmoball extends JFrame{
     protected void setMode(boolean mode){
     	this.mode=mode;
     	if(mode == GAME_MODE){
+    		animationWindow.restartGame();
     		animationWindow.setGridInvisible();
     		
     		animationWindow.setElement(animationWindow.getGridPanel().getElement());
@@ -554,6 +555,8 @@ public class Gizmoball extends JFrame{
     		fastForwardButton.setEnabled(true);
     		
     	}else{
+    		animationWindow.setMode(false);
+    		animationWindow.restartGame();
     		animationWindow.setGridVisible();
     		
     		squareBumperButton.setEnabled(true);
