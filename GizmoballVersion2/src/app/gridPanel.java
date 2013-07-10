@@ -20,8 +20,9 @@ public class gridPanel extends JPanel  implements MouseListener {
     private int gridSize = Constants.WIDTH*Constants.SCALE/number_of_grids_per_dimension;
     private boolean isSelected;
     private gridElement tempBuffer=null;
+    private Gizmoball game;
     
-    public gridPanel(){
+    public gridPanel(Gizmoball game){
     	element = new gridElement[Constants.number_of_grids_per_dimension][Constants.number_of_grids_per_dimension];
     	for(int row=0;row<Constants.number_of_grids_per_dimension;row++){
     		for(int col=0;col<Constants.number_of_grids_per_dimension;col++){
@@ -30,6 +31,7 @@ public class gridPanel extends JPanel  implements MouseListener {
     		}
     	}
     	isSelected = false;
+    	this.game = game;
     	this.addMouseListener(this);
     }
     
@@ -78,14 +80,45 @@ public class gridPanel extends JPanel  implements MouseListener {
 		}
     }
     
-    public void deleteGizmo(gridElement gizmoElement){
+    public void deleteGizmos(gridElement gizmoElement){
     	//TODO: need to check if the gizmo exist on the board
     	
+    	/*int col = gizmoElement.getElement().getX();
+    	int row = gizmoElement.getElement().getY();
+    	col = col/gridSize;
+    	row = row/gridSize;*/
     	gizmoElement.setElement(null);
-    	tempBuffer=null;
+    	gizmoElement = null;
+    	this.isSelected = false;
     	
     }
 
+    public boolean moveGizmos(int destCol, int destRow){
+    	boolean success = false;
+    	
+    	if( element[destCol][destRow].hasElement()){
+    		success = false;
+        	
+        	System.out.println("Gizmo moved fail");
+    	}else{
+    		gizmosInterface newGizmo =tempBuffer.getElement();
+    		this.deleteGizmos(tempBuffer);
+    		//TODO:once a gizmo is moved, it cant be selected
+    		//need to fix this bugs
+    		newGizmo.select();
+    		newGizmo.setLocation(destCol*gridSize, destRow*gridSize);
+			element[destCol][destCol].setElement(newGizmo);
+			//tempBuffer = element[destCol][destCol];
+			tempBuffer = null;
+			this.isSelected = false;
+			this.game.setMoveMode(false);
+    		this.repaint();
+    		
+    		
+    	}
+
+    	return success;
+    }
 
     @Override public void paintComponent(Graphics g) {
         // first repaint the proper background color (controlled by
@@ -128,23 +161,61 @@ public class gridPanel extends JPanel  implements MouseListener {
 		int row = (int)(e.getY()/gridSize);
 
 		if(element[col][row].hasElement()){
+			if(!(this.game.getMoveMode())){
 			if(!isSelected)
 			{
 					tempBuffer = element[col][row];
 					tempBuffer.getElement().select();
 					isSelected = true;
 			}else{
-				if(tempBuffer == element[col][row]){
-						tempBuffer.getElement().select();
-						isSelected = false;
+				//System.out.println("Move mode is: "+this.game.getMoveMode());
+				//if(!(this.game.getMoveMode())){
+				//if it is not in move mode, select other gizmos
+					if(tempBuffer == element[col][row]){
+							tempBuffer.getElement().select();
+							isSelected = false;
+							tempBuffer = null;
+					}else{
+						if(tempBuffer.getElement()!=null){
+							tempBuffer.getElement().select(); //change the selected item into its original color	
+							//tempBuffer = null;
+						}
+							tempBuffer = element[col][row];
+							tempBuffer.getElement().select();			
+					}
+				//}else{
+				//if it is in move mode, move to location
+				//	this.moveGizmos(col,row);
+				//}
+					
+			}}else{
+				//this handles the situation when the move mode is on
+				//System.out.println("testing");
+				//TODO: display a tooltip at the cursor when mouse clicked
+			}			
+		}else{
+			if(!(this.game.getMoveMode())){
+				if(isSelected){
+					tempBuffer.getElement().select();
+					isSelected = false;
+					tempBuffer = null;
 				}else{
-					tempBuffer.getElement().select(); //change the selected item into its original color
-						tempBuffer = element[col][row];
-						tempBuffer.getElement().select();
-				
+					//if nothing is selected, nothing happens
+					System.out.println("nothing happens");
 				}
+			}else{
+				this.moveGizmos(col,row);
 			}
 		}
+		
+/*		if(tempBuffer!=null){
+		if(col ==tempBuffer.getElement().getX() && row == tempBuffer.getElement().getY()){
+			tempBuffer.getElement().select();
+				isSelected =false;
+				this.game.setMoveMode(false);
+				tempBuffer = null;
+
+		}}*/
 		
 		this.repaint();
 

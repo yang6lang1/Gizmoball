@@ -112,10 +112,11 @@ public class AnimationWindow extends JComponent {
     private AnimationEventListener eventListener;
     private int number_of_grids_per_dimension =Constants.number_of_grids_per_dimension;
     private int gridSize = Constants.WIDTH*Constants.SCALE/number_of_grids_per_dimension;
-    private gridPanel panel = new gridPanel();
+    private gridPanel panel;
     private BouncingBall ball;
     private Timer timer;
     private boolean mode;
+    private Gizmoball game;
     private gizmosInterface gizmos[]; //gizmos is a collection of all the Gizmos on the screen
     private gridElement element[][];  //element is the collection of all the grid elements (20*20)
     private int gizmoCount=0;//It counts how many Gizmos are currently on the window(ball is not included)
@@ -123,10 +124,12 @@ public class AnimationWindow extends JComponent {
         //Node: this variable can be used in update()
 
     //Constructor:
-    public AnimationWindow(){
+    public AnimationWindow(Gizmoball game){
     	gizmos =new 
         		gizmosInterface[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
     	ball = new BouncingBall(this);
+    	this.game = game;
+    	panel = new gridPanel(this.game);
     	panel.setBounds(0, 0, Constants.WIDTH*Constants.SCALE, Constants.HEIGHT*Constants.SCALE);
     	panel.setOpaque(true);
     	panel.setBackground(Color.black);

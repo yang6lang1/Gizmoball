@@ -40,6 +40,7 @@ public class Gizmoball extends JFrame{
 	private static final boolean GAME_MODE = false;
 	private static final boolean BUILD_MODE = true;
 	private boolean mode = GAME_MODE; //0 - Game mode, 1 - Build modes
+	private boolean moveMode = false;
     protected AnimationWindow animationWindow;
     private JButton squareBumperButton,triangularBumperButton,circularBumperButton,
     leftFlipperButton,rightFlipperButton,ballButton,moveButton,rotateButton,deleteButton,
@@ -69,7 +70,7 @@ public class Gizmoball extends JFrame{
         contentPane.setLayout(null);
  
         //Create the animation area used for output.
-        animationWindow = new AnimationWindow();
+        animationWindow = new AnimationWindow(this);
         animationWindow.setBounds((width/4)*scale, 0, width*scale, height*scale);
         animationWindow.setGridInvisible();
         contentPane.add(animationWindow); 
@@ -472,11 +473,18 @@ public class Gizmoball extends JFrame{
         moveButton.setToolTipText("<html>Move selected gizmo with keyboard.<br/>Eg: up,down,left,right</html>");
         moveButton.setBounds((int)(width*scale*1/32),(int)(width*scale*1/32),
         		(int)(width*scale*5/64),(int)(width*scale*5/64));
-        // when this button is pressed, a square bumper is added to the game board
+        // when this button is pressed, the gridPanel should enter move mode
         moveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO:
-            	    
+            	//1. check if the destination is available
+            	//2. delete the gizmo in the original place
+            	//3. add a new gizmo in the destination
+            	if(!animationWindow.getGridPanel().isSelected()){
+            		System.out.println("Please select a ball");
+            	}else{
+            		setMoveMode(true); //enable move mode	
+            	}
+            	
             }
         });
         panelTwo.add(moveButton);
@@ -488,11 +496,11 @@ public class Gizmoball extends JFrame{
         rotateButton.setToolTipText("Add a triangular bumper");
         rotateButton.setBounds((int)(width*scale*9/64),(int)(width*scale*1/32),
         		(int)(width*scale*5/64),(int)(width*scale*5/64));
-        // when this button is pressed, a square bumper is added to the game board
+        // when this button is pressed, the selected gizmo is rotated 90 clockwise
         rotateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
-            	    
+            	animationWindow.getGridPanel().getBuffer().getElement().rotate();
+            	animationWindow.getGridPanel().repaint();
             }
         });
         panelTwo.add(rotateButton);
@@ -508,7 +516,7 @@ public class Gizmoball extends JFrame{
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	if(animationWindow.getGridPanel().getBuffer()!= null){
-            		animationWindow.getGridPanel().deleteGizmo(animationWindow.getGridPanel().getBuffer());
+            		animationWindow.getGridPanel().deleteGizmos(animationWindow.getGridPanel().getBuffer());
             		animationWindow.getGridPanel().repaint();
             	}
             	  
@@ -581,6 +589,13 @@ public class Gizmoball extends JFrame{
     		}
     }
     
+    public void setMoveMode(boolean mode){
+    	this.moveMode = mode;
+    }
+    
+    public boolean getMoveMode(){
+    	return this.moveMode;
+    }
     
     public static void main(String[] args) {
     	

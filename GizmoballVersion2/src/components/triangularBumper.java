@@ -137,4 +137,14 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
 		
 	}
 
+	@Override
+	public void rotate() {
+		if(this.orientation==0||this.orientation ==90||this.orientation==180){
+			this.setOrientation(this.getOrientation() +90);
+		}else{
+			this.setOrientation(0);
+		}
+		
+	}
+
 }

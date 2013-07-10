@@ -92,4 +92,10 @@ public class squareBumper extends JComponent implements gizmosInterface{
 		}
 
 	}
+
+	@Override
+	public void rotate() {
+		//do nothing
+		
+	}
 }
