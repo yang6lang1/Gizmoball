@@ -16,8 +16,6 @@ import app.AnimationWindow;
 
 public class BouncingBall {
 
-	private static double speed =Constants.SPEED; //TODO: this constant needs to be sued in later version
-	private static Angle angle = Constants.ANGLE;			  //eg: velocity & angle
 	private static final double delta_t = Constants.delta_t/1000;
 	
 /*    private int x = (int) ((Math.random() * 100.0) + 100.0); // TODO: the ball is not randomly 
@@ -32,6 +30,9 @@ public class BouncingBall {
 	//for testing purposes
 	private int x = 632;
 	private int y = 300;
+	private double speed =Constants.SPEED; //TODO: this constant needs to be sued in later version
+	private Angle angle = Constants.ANGLE;			  //eg: velocity & angle
+
 	private int vx =(int)(speed*angle.cos());
 	private int vy = (int)(speed*angle.sin());
 	private int counter=0;
@@ -53,6 +54,22 @@ public class BouncingBall {
         counter2 = 0;
     }
 
+    public void setSpeed(double speed){
+    	this.speed = speed;
+    }
+    
+    public void setAngle(Angle angle){
+    	this.angle = angle;
+    }
+    
+    public double getSpeed(){
+    	return this.speed;
+    }
+    
+    public Angle getAngle(){
+    	return this.angle;
+    }
+    
     /**
      * @modifies this
      * @effects Moves the ball according to its velocity.  Reflections off 

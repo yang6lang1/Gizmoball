@@ -299,6 +299,10 @@ public class AnimationWindow extends JComponent {
     	}
     }
     
+    public void restartGame(){
+    	this.ball.setSpeed(Constants.SPEED);
+    	this.ball.setAngle(Constants.ANGLE);
+    }
     
     /**
      * Overview: AnimationEventListener is an inner class that 
