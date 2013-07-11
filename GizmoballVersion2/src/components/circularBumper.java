@@ -22,6 +22,7 @@ public class circularBumper extends JComponent implements gizmosInterface{
     private boolean trigger = false;
     private char type;
     private int resetTime = 10;//ms
+    private Color color;
     
     public circularBumper(){
     	this(ORIGINAL_X,ORIGINAL_Y);
@@ -31,6 +32,7 @@ public class circularBumper extends JComponent implements gizmosInterface{
     	this.x = x;
     	this.y = y;
     	this.type = TYPE;
+    	this.color = Constants.colorOfCircularBumper;
     }
     public int getRadius(){
     	return radius;
@@ -59,6 +61,10 @@ public class circularBumper extends JComponent implements gizmosInterface{
     	return this.type;
     }
     
+    public Color getColor(){
+    	return this.color;
+    }
+    
     public boolean isTouched(){
     	return trigger;
     }
@@ -76,15 +82,28 @@ public class circularBumper extends JComponent implements gizmosInterface{
     	this.trigger = trigger;
     }
     
+    public void setColor(Color color){
+    	this.color = color;
+    }
     public void paintComponents(Graphics g){
     	
-        g.setColor(Constants.colorOfCircularBumper);
+        g.setColor(this.color);
         g.fillOval(x, y, radius+radius, radius+radius);
-        g.setColor(Constants.colorOfCircularBumper);
+        g.setColor(this.color);
         g.drawOval(x, y, radius+radius, radius+radius);  
 //        g.setColor(Color.green);
 //        g.fillRoundRect(x, y+2*Constants.L, radius, 2*Constants.L,(int)(radius),(int)(radius));
  
     }
+
+
+	public void select() {
+		if(this.color == Constants.colorOfCircularBumper){
+			this.setColor(Color.white);
+		}else{
+			this.setColor(Constants.colorOfCircularBumper);
+		}
+		
+	}
 
 }

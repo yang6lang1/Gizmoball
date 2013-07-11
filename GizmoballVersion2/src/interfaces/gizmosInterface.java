@@ -10,4 +10,8 @@ public interface gizmosInterface {
 	public void setLocation(int x, int y);
 	//S-square,T-triangle,C-circle,L-leftFlipper,R-rightFlipper
 	public char getType();
+	
+	public void select();
+	
+	public void repaint();
 }

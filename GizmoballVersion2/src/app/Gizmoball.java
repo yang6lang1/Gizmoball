@@ -475,7 +475,7 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         moveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: move a gizmo
+            	//TODO:
             	    
             }
         });
@@ -504,11 +504,14 @@ public class Gizmoball extends JFrame{
         deleteButton.setToolTipText("Add a circular bumper");
         deleteButton.setBounds((int)(width*scale*1/32),(int)(width*scale*9/64),
         		(int)(width*scale*5/64),(int)(width*scale*5/64));
-        // when this button is pressed, a square bumper is added to the game board
+        // when this button is pressed, a selected gizmo is deleted
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
-            	System.out.println("A circular bumper is added");    
+            	if(animationWindow.getGridPanel().getBuffer()!= null){
+            		animationWindow.getGridPanel().deleteGizmo(animationWindow.getGridPanel().getBuffer());
+            		animationWindow.getGridPanel().repaint();
+            	}
+            	  
             }
         });
         panelTwo.add(deleteButton);

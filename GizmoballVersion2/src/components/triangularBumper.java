@@ -25,6 +25,7 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
     private boolean trigger = false;
     private char type;
     private int resetTime = 10;//ms
+    private Color color;
     
     public triangularBumper(){
     	this(ORIGINAL_X,ORIGINAL_Y,DEFAULT_ORIENTATION);
@@ -35,6 +36,7 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
     	this.y = y;
     	this.orientation =orientation;
     	this.type = TYPE;
+    	this.color = Constants.colorOfTriangularBumper;
     }
     
     public int getEdge(){
@@ -113,10 +115,26 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
 			break;
 		}
     	
-        g.setColor(Constants.colorOfTriangularBumper);
+        g.setColor(this.color);
         g.fillPolygon(xPoints, yPoints, 3);
-        g.setColor(Constants.colorOfTriangularBumper);
+        g.setColor(this.color);
         g.drawPolygon(xPoints, yPoints, 3);  
     }
+
+	@Override
+	public void select() {
+		if(this.color == Constants.colorOfTriangularBumper){
+			this.setColor(Color.white);
+		}else{
+			this.setColor(Constants.colorOfTriangularBumper);
+		}
+
+		
+	}
+
+	private void setColor(Color color) {
+		this.color = color;
+		
+	}
 
 }
