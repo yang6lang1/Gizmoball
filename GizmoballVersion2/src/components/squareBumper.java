@@ -23,6 +23,7 @@ public class squareBumper extends JComponent implements gizmosInterface{
     private char type;
     private int resetTime = 10;//ms
     private Color color;
+    private String name;
     
     public squareBumper(){
     	this(ORIGINAL_X,ORIGINAL_Y);
@@ -33,6 +34,7 @@ public class squareBumper extends JComponent implements gizmosInterface{
     	this.y = y;
     	this.type = TYPE;
     	this.color = Constants.colorOfSquareBumper;
+    	this.name = new String("S"+x/Constants.L+"_"+y/Constants.L);
     }
     public int getEdge(){
     	return edgeLength;
@@ -44,6 +46,10 @@ public class squareBumper extends JComponent implements gizmosInterface{
     
     public int getY(){
     	return y;
+    }
+    
+    public String getName(){
+    	return this.name;
     }
     
     public double getSquareCOR(){
@@ -61,6 +67,11 @@ public class squareBumper extends JComponent implements gizmosInterface{
     public void setLocation(int x, int y){
     	this.x = x;
     	this.y = y;
+    	this.name = new String("S"+x/Constants.L+"_"+y/Constants.L);
+    }
+    
+    public void setName(String name){
+    	this.name=name;
     }
     
     public void setColor(Color color){

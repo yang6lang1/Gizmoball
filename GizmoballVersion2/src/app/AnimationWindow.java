@@ -98,7 +98,7 @@ import javax.swing.Timer;
 
 import system.Constants;
 
-import components.BouncingBall;
+import components.ball;
 import components.gridElement;
 
 /*AnimationWindow contains all the oprations for game mode
@@ -113,7 +113,7 @@ public class AnimationWindow extends JComponent {
     private int number_of_grids_per_dimension =Constants.number_of_grids_per_dimension;
     private int gridSize = Constants.WIDTH*Constants.SCALE/number_of_grids_per_dimension;
     private gridPanel panel;
-    private BouncingBall ball;
+    private ball ball;
     private Timer timer;
     private boolean mode;
     private Gizmoball game;
@@ -127,7 +127,7 @@ public class AnimationWindow extends JComponent {
     public AnimationWindow(Gizmoball game){
     	gizmos =new 
         		gizmosInterface[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
-    	ball = new BouncingBall(this);
+    	ball = new ball(this);
     	this.game = game;
     	panel = new gridPanel(this.game);
     	panel.setBounds(0, 0, Constants.WIDTH*Constants.SCALE, Constants.HEIGHT*Constants.SCALE);
@@ -303,7 +303,7 @@ public class AnimationWindow extends JComponent {
     }
     
     public void restartGame(){
-    	this.ball = new BouncingBall(this);
+    	this.ball = new ball(this);
     }
     
     /**

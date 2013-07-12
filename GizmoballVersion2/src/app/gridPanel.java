@@ -73,6 +73,7 @@ public class gridPanel extends JPanel  implements MouseListener {
 		}
 		
 		gizmo.setLocation(col*gridSize, row*gridSize);
+		
 		try{
 			element[col][row].setElement(gizmo);
 		}catch(ArrayIndexOutOfBoundsException e){
@@ -107,13 +108,12 @@ public class gridPanel extends JPanel  implements MouseListener {
     		//need to fix this bugs
     		newGizmo.select();
     		newGizmo.setLocation(destCol*gridSize, destRow*gridSize);
-			element[destCol][destCol].setElement(newGizmo);
-			//tempBuffer = element[destCol][destCol];
+			element[destCol][destRow].setElement(newGizmo);
+			
 			tempBuffer = null;
 			this.isSelected = false;
 			this.game.setMoveMode(false);
     		this.repaint();
-    		
     		
     	}
 
@@ -159,7 +159,7 @@ public class gridPanel extends JPanel  implements MouseListener {
 		//use the position to calculate which Gizmo is selected
 		int col = (int)(e.getX()/gridSize);
 		int row = (int)(e.getY()/gridSize);
-
+		
 		if(element[col][row].hasElement()){
 			if(!(this.game.getMoveMode())){
 			if(!isSelected)
@@ -201,7 +201,7 @@ public class gridPanel extends JPanel  implements MouseListener {
 					tempBuffer = null;
 				}else{
 					//if nothing is selected, nothing happens
-					System.out.println("nothing happens");
+					//System.out.println("nothing happens");
 				}
 			}else{
 				this.moveGizmos(col,row);

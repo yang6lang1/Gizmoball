@@ -25,9 +25,9 @@ import javax.swing.SwingConstants;
 
 import system.Constants;
 
-import components.circularBumper;
+import components.circleBumper;
 import components.squareBumper;
-import components.triangularBumper;
+import components.triangleBumper;
 
 
 public class Gizmoball extends JFrame{	
@@ -278,8 +278,14 @@ public class Gizmoball extends JFrame{
         // when this button is pushed it enters game mode
         gameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+	    	if(!animationWindow.getGridPanel().isSelected()){
                 setMode(GAME_MODE);
                 System.out.println("Enter mode: "+mode);    
+	    	}else{
+    			//TODO
+    			System.out.println("Please deselect the gizmo");
+    		}
+
             }
         });
         panelOne.add(gameButton);
@@ -392,7 +398,7 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         triangularBumperButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	animationWindow.getGridPanel().addGizmos(new triangularBumper());
+            	animationWindow.getGridPanel().addGizmos(new triangleBumper());
             	animationWindow.getGridPanel().repaint();    
             }
         });
@@ -408,7 +414,7 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         circularBumperButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	animationWindow.getGridPanel().addGizmos(new circularBumper());
+            	animationWindow.getGridPanel().addGizmos(new circleBumper());
             	animationWindow.getGridPanel().repaint();    
             }
         });
@@ -499,8 +505,10 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, the selected gizmo is rotated 90 clockwise
         rotateButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	animationWindow.getGridPanel().getBuffer().getElement().rotate();
-            	animationWindow.getGridPanel().repaint();
+            	if(animationWindow.getGridPanel().getBuffer()!= null){
+	            	animationWindow.getGridPanel().getBuffer().getElement().rotate();
+	            	animationWindow.getGridPanel().repaint();
+            	}
             }
         });
         panelTwo.add(rotateButton);
@@ -546,24 +554,26 @@ public class Gizmoball extends JFrame{
     	this.mode=mode;
     	if(mode == GAME_MODE){
     		animationWindow.restartGame();
-    		animationWindow.setGridInvisible();
-    		
-    		animationWindow.setElement(animationWindow.getGridPanel().getElement());
-    		squareBumperButton.setEnabled(false);
-    		triangularBumperButton.setEnabled(false);
-    		circularBumperButton.setEnabled(false);
-    		ballButton.setEnabled(false);
-    		leftFlipperButton.setEnabled(false);
-    		rightFlipperButton.setEnabled(false);
-    		moveButton.setEnabled(false);
-    		rotateButton.setEnabled(false);
-    		deleteButton.setEnabled(false);
-    		connectButton.setEnabled(false);
-    		gameButton.setEnabled(false);
-    		buildButton.setEnabled(true);
-    		slowDownButton.setEnabled(true);
-    		playPauseButton.setEnabled(true);
-    		fastForwardButton.setEnabled(true);
+
+	    		animationWindow.setGridInvisible();
+	    		
+	    		animationWindow.setElement(animationWindow.getGridPanel().getElement());
+	    		squareBumperButton.setEnabled(false);
+	    		triangularBumperButton.setEnabled(false);
+	    		circularBumperButton.setEnabled(false);
+	    		ballButton.setEnabled(false);
+	    		leftFlipperButton.setEnabled(false);
+	    		rightFlipperButton.setEnabled(false);
+	    		moveButton.setEnabled(false);
+	    		rotateButton.setEnabled(false);
+	    		deleteButton.setEnabled(false);
+	    		connectButton.setEnabled(false);
+	    		gameButton.setEnabled(false);
+	    		buildButton.setEnabled(true);
+	    		slowDownButton.setEnabled(true);
+	    		playPauseButton.setEnabled(true);
+	    		fastForwardButton.setEnabled(true);
+
     		
     	}else{
     		animationWindow.setMode(false);

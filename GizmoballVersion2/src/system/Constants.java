@@ -35,7 +35,7 @@ public class Constants {
 	//Bouncing ball
 	//Ball velocities must range at least from 0.01 L/sec to 200 L/sec
 	//0 L/sec (stationary) must also be supported.***special case***
-	public static final double SPEED = 20.0*L; //default speed
+	public static final double SPEED = 60.0*L; //default speed
 	public static final Angle ANGLE = new Angle(-1,-20); //default direction: upwards
 	//public static final Angle ANGLE = new Angle(1,-20); //default direction: upwards
 	public static final int RADIUS = L/4;//according to the requirement

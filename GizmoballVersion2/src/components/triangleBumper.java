@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 
 import system.Constants;
 
-public class triangularBumper  extends JComponent implements gizmosInterface{
+public class triangleBumper  extends JComponent implements gizmosInterface{
 	private static final long serialVersionUID =2L;
 	private static final char TYPE = 'T';
 	private static final int DEFAULT_ORIENTATION =0;
@@ -26,17 +26,19 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
     private char type;
     private int resetTime = 10;//ms
     private Color color;
+    private String name;
     
-    public triangularBumper(){
+    public triangleBumper(){
     	this(ORIGINAL_X,ORIGINAL_Y,DEFAULT_ORIENTATION);
     }
     
-    public triangularBumper(int x, int y,int orientation){
+    public triangleBumper(int x, int y,int orientation){
     	this.x = x;
     	this.y = y;
     	this.orientation =orientation;
     	this.type = TYPE;
     	this.color = Constants.colorOfTriangularBumper;
+    	this.name = new String("T"+x/Constants.L+"_"+y/Constants.L);
     }
     
     public int getEdge(){
@@ -53,6 +55,10 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
     
     public int getY(){
     	return y;
+    }
+    
+    public String getName(){
+    	return name;
     }
     
     public int getOrientation(){
@@ -74,6 +80,11 @@ public class triangularBumper  extends JComponent implements gizmosInterface{
     public void setLocation(int x, int y){
     	this.x = x;
     	this.y = y;
+    	this.name = new String("T"+x/Constants.L+"_"+y/Constants.L);
+    }
+    
+    public void setName(String name){
+    	this.name = name;
     }
     
     public void setOrientation(int theOrientation){

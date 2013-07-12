@@ -14,7 +14,7 @@ import physics.Vect;
 import system.Constants;
 import app.AnimationWindow;
 
-public class BouncingBall {
+public class ball {
 
 	private static final double delta_t = Constants.delta_t/1000;
 	
@@ -47,7 +47,7 @@ public class BouncingBall {
     private AnimationWindow window;
 
     //Constructor:
-    public BouncingBall(AnimationWindow win) {
+    public ball(AnimationWindow win) {
         this.window = win;
         timeForCollision = new double[Constants.number_of_grids_per_dimension * Constants.number_of_grids_per_dimension];
     	speed =Constants.SPEED; //TODO: this constant needs to be sued in later version

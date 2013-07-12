@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 
 import system.Constants;
 
-public class circularBumper extends JComponent implements gizmosInterface{
+public class circleBumper extends JComponent implements gizmosInterface{
 	private static final long serialVersionUID =3L;
 	private static final char TYPE = 'C';
 	private static final int ORIGINAL_X = 0;
@@ -23,16 +23,18 @@ public class circularBumper extends JComponent implements gizmosInterface{
     private char type;
     private int resetTime = 10;//ms
     private Color color;
+    private String name;
     
-    public circularBumper(){
+    public circleBumper(){
     	this(ORIGINAL_X,ORIGINAL_Y);
     }
     
-    public circularBumper(int x, int y){
+    public circleBumper(int x, int y){
     	this.x = x;
     	this.y = y;
     	this.type = TYPE;
     	this.color = Constants.colorOfCircularBumper;
+    	this.name = new String("S"+x/Constants.L+"_"+y/Constants.L);
     }
     public int getRadius(){
     	return radius;
@@ -72,6 +74,7 @@ public class circularBumper extends JComponent implements gizmosInterface{
     public void setLocation(int x, int y){
     	this.x = x;
     	this.y = y;
+    	this.name = new String("C"+x/Constants.L+"_"+y/Constants.L);
     }
     
     public void setCircleCOR(double CircleCOR){
