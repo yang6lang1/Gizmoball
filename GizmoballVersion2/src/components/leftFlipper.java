@@ -7,6 +7,7 @@ import java.awt.Graphics;
 
 import javax.swing.JComponent;
 
+import physics.Angle;
 import system.Constants;
 
 public class leftFlipper extends JComponent implements gizmosInterface {
@@ -14,40 +15,48 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 		private static final long serialVersionUID =4L;
 		private static final char TYPE = 'L';
 		private static final int DEFAULT_ORIENTATION =0;
+		private static final Angle DEFAULT_ANGLE =Angle.ZERO;
 		private static final int ORIGINAL_X = 0;
 		private static final int ORIGINAL_Y = 0;
-	    private static final int edgeLength = 1* Constants.L;
-	    private static final double hypotenuse = Math.sqrt(2)*Constants.L;
+	    private static final int edgeLength = 2* Constants.L;
+	    private static final int thickness = (int)(0.5*Constants.L);
 	    
 	    private int x;
 	    private int y;
-		private int orientation = 0;
-	    private double TriangleCOR = Constants.TriangleCOR;//coefficient of reflect
-	    private boolean trigger = false;
+		private int orientation;
+		private Angle angle;
+	    private double LF_COR = Constants.LF_COR;//coefficient of reflection
+	    private boolean trigger = false; 		//this determins if the flipper is moving or not
 	    private char type;
 	    private int resetTime = 10;//ms
 	    private Color color;
 	    private String name;
+	    private double angularSpeed;//this angularspeed has no direction
+	    												//the direction if angularVelocity is counterclockwise
+	    
 	    
 	    public leftFlipper(){
-	    	this(ORIGINAL_X,ORIGINAL_Y,DEFAULT_ORIENTATION);
+	    	this(ORIGINAL_X,ORIGINAL_Y,DEFAULT_ORIENTATION,DEFAULT_ANGLE);
 	    }
 	    
-	    public triangleBumper(int x, int y,int orientation){
+	    public leftFlipper(int x, int y,int orientation,Angle angle){
 	    	this.x = x;
 	    	this.y = y;
+	    	this.name = new String("L"+x/Constants.L+"_"+y/Constants.L);
 	    	this.orientation =orientation;
 	    	this.type = TYPE;
-	    	this.color = Constants.colorOfTriangularBumper;
-	    	this.name = new String("T"+x/Constants.L+"_"+y/Constants.L);
+	    	this.trigger = true;//TODO: set to be true for testing purpose
+	    	this.color = Constants.colorOfLeftFlipper;
+	    	this.angle = angle;
+	    	this.angularSpeed =Constants.angularSpeed;
 	    }
 	    
 	    public int getEdge(){
 	    	return edgeLength;
 	    }
 	    
-	    public double getHypo(){
-	    	return hypotenuse;
+	    public int getThickness(){
+	    	return thickness;
 	    }
 	    
 	    public int getX(){
@@ -66,8 +75,8 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 	    	return orientation;
 	    }
 	    
-	    public double getTriangleCOR(){
-	    	return TriangleCOR;
+	    public double getLFCOR(){
+	    	return this.LF_COR;
 	    }
 	 
 	    public char getType(){
@@ -78,10 +87,18 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 	    	return trigger;
 	    }
 	    
+	    public Angle getAngle(){
+	    	return this.angle;
+	    }
+	    
+	    public double getAngularSpeed(){
+	    	return this.angularSpeed;
+	    }
+	    
 	    public void setLocation(int x, int y){
 	    	this.x = x;
 	    	this.y = y;
-	    	this.name = new String("T"+x/Constants.L+"_"+y/Constants.L);
+	    	this.name = new String("L"+x/Constants.L+"_"+y/Constants.L);
 	    }
 	    
 	    public void setName(String name){
@@ -96,16 +113,26 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 	    	
 	    }
 	    
-	    public void setTriangleCOR(double TriangleCOR){
-	    	this.TriangleCOR = TriangleCOR;
+	    public void setLFCOR(double LF_COR){
+	    	this.LF_COR = LF_COR;
 	    }
 	    
 	    public void setTrigger(boolean trigger){
 	    	this.trigger = trigger;
 	    }
 	    
-	    public void paintComponents(Graphics g){
-	    	int[] xPoints = new int[3],yPoints=new int[3];
+	    public void setAngle(Angle angle){
+	    	this.angle = angle;
+	    }
+	    
+	    /*Note: angularSpeed should be in radians
+	     * */
+	    public void setAngularSpeed(double angularSpeed){
+	    	this.angularSpeed = angularSpeed;
+	    }
+	    
+	    public void paintComponents(Graphics g){//TODO
+	    	int[] xPoints = new int[2],yPoints=new int[2];
 			switch (this.orientation){
 			case 0:
 				xPoints[0]=x; xPoints[1]=x;				   xPoints[2]=x+this.getEdge();
@@ -130,7 +157,8 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 	        g.setColor(this.color);
 	        g.fillPolygon(xPoints, yPoints, 3);
 	        g.setColor(this.color);
-	        g.drawPolygon(xPoints, yPoints, 3);  
+	        g.drawRoundRect(x, type, width, height, arcWidth, arcHeight)
+
 	    }
 
 		@Override
@@ -159,6 +187,5 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 			
 		}
 
-	}
-
 }
+

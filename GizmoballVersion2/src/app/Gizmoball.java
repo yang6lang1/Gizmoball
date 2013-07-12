@@ -269,23 +269,22 @@ public class Gizmoball extends JFrame{
         image=icon.getImage().getScaledInstance((int)(width*scale*1/8), (int)(height*scale*3/32), 0);
         icon.setImage(image);
         //button = makeButtonWithImage("Game-Icon","Enter the Game Mode","Game");
-        gameButton=new JButton("Game Mode",icon);
+        gameButton=new JButton("Play",icon);
         gameButton.setHorizontalTextPosition(JButton.CENTER);
         gameButton.setVerticalTextPosition(JButton.TOP);
-        gameButton.setToolTipText("Game mode");
+        gameButton.setToolTipText("Game");
         gameButton.setBounds((int)(width*scale*1/16), (int)(width*scale*1/32), 
         		(int)(width*scale*1/8), (int)(width*scale*1/8));
         // when this button is pushed it enters game mode
         gameButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-	    	if(!animationWindow.getGridPanel().isSelected()){
-                setMode(GAME_MODE);
-                System.out.println("Enter mode: "+mode);    
-	    	}else{
-    			//TODO
-    			System.out.println("Please deselect the gizmo");
-    		}
-
+		    	if(animationWindow.getGridPanel().isSelected()){
+		    		animationWindow.getGridPanel().getBuffer().getElement().select();
+		    		animationWindow.getGridPanel().setSelectionType(false);
+		    		animationWindow.getGridPanel().setBuffer(null);
+		    	}
+	                setMode(GAME_MODE);
+	               ///] System.out.println("Enter mode: "+mode);    
             }
         });
         panelOne.add(gameButton);
@@ -293,7 +292,7 @@ public class Gizmoball extends JFrame{
         icon = new ImageIcon("res/Build-Icon.png");
         image=icon.getImage().getScaledInstance((int)(width*scale*1/8), (int)(width*scale*3/32), 0);
         icon.setImage(image);
-        buildButton=new JButton("Build Mode",icon);
+        buildButton=new JButton("Build",icon);
         buildButton.setHorizontalTextPosition(JButton.CENTER);
         buildButton.setVerticalTextPosition(JButton.TOP);
         buildButton.setToolTipText("Build mode");

@@ -54,6 +54,10 @@ public class gridPanel extends JPanel  implements MouseListener {
     	this.isSelected = selectionType;
     }
     
+    public void setBuffer(gridElement buffer){
+    	this.tempBuffer =buffer;
+    }
+    
     public void addGizmos(gizmosInterface gizmo){//TODO: in Gizmoball.java I need to check the gizmoCount
 				//if no places to place the gizmos I need to show some message
 		int row=0,col = 0;

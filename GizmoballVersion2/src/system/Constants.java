@@ -11,9 +11,6 @@ public class Constants {
 
 	//gridPanel:
 	public static final Color colorOfGridLine = Color.orange;
-	public enum SelectionType {
-	    NONE, SELECTED, MOVESELETED, CONNECTSELETED	    
-	}
 	
 	//Application window
 	//The playing area must be at least 20 L wide by 20 L high
@@ -32,10 +29,10 @@ public class Constants {
 	public static final double mu = 0.025; //unit 1/sec
 	public static final double mu2 = 0.025/L;
 	
-	//Bouncing ball
+	//ball
 	//Ball velocities must range at least from 0.01 L/sec to 200 L/sec
 	//0 L/sec (stationary) must also be supported.***special case***
-	public static final double SPEED = 60.0*L; //default speed
+	public static final double SPEED = 50.0*L; //default speed
 	public static final Angle ANGLE = new Angle(-1,-20); //default direction: upwards
 	//public static final Angle ANGLE = new Angle(1,-20); //default direction: upwards
 	public static final int RADIUS = L/4;//according to the requirement
@@ -52,4 +49,10 @@ public class Constants {
 	//circular bumper
 	public static final double CircleCOR =1.0;
 	public static final Color colorOfCircularBumper = Color.yellow;
+	
+	//left flipper
+	public static final double LF_COR = 0.95;
+	public static final Color colorOfLeftFlipper = Color.red;
+	public static final double angularSpeed = 3*Math.PI;
+
 }
