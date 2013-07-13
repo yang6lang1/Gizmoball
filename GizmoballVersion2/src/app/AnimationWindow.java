@@ -198,6 +198,13 @@ public class AnimationWindow extends JComponent {
         repaint(repaintArea.x, repaintArea.y, repaintArea.width,
                         repaintArea.height);
         
+        //TODO: repaint the position of left and right flippers
+        //example:
+        //Rectangle oldPos = leftflipper.boundingBox();
+        //leftflipper.swing(); //update the angle
+        //Rectangle repaintArea = oldPos.union(leftflipper.boundingBox());
+        //repaint(repaintArea.x, repaintArea.y, repaintArea.width,repaintArea.height);
+        
     }
 
     /**

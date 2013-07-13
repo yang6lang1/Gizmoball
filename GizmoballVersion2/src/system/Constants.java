@@ -16,7 +16,7 @@ public class Constants {
 	//The playing area must be at least 20 L wide by 20 L high
 	public static final int WIDTH = 160;
 	public static final int HEIGHT = 160;
-	public static final int SCALE = 4;//scale factor for the window size
+	public static final int SCALE = 2;//scale factor for the window size
 									// we can set based on our own need
 	public static final int number_of_grids_per_dimension = 20;
 	//The upper left corner is (0,0) and the lower right corner is (20,20)

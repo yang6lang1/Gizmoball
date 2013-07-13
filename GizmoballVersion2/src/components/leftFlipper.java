@@ -4,6 +4,8 @@ import interfaces.gizmosInterface;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
@@ -83,7 +85,7 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 	    	return this.type;
 	    }
 	    
-	    public boolean isTouched(){
+	    public boolean isTriggered(){
 	    	return trigger;
 	    }
 	    
@@ -131,34 +133,113 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 	    	this.angularSpeed = angularSpeed;
 	    }
 	    
-	    public void paintComponents(Graphics g){//TODO
-	    	int[] xPoints = new int[2],yPoints=new int[2];
-			switch (this.orientation){
+	    public void swing(){
+	    	switch (this.orientation){//TODO
 			case 0:
-				xPoints[0]=x; xPoints[1]=x;				   xPoints[2]=x+this.getEdge();
-				yPoints[0]=y; yPoints[1]=y+this.getEdge(); yPoints[2]=y+this.getEdge();
 				break;
 			case 90:
-				xPoints[0]=x+this.getEdge(); xPoints[1]=x; xPoints[2]=x;
-				yPoints[0]=y;			     yPoints[1]=y; yPoints[2]=y+this.getEdge();
 				break;
 			case 180:
-				xPoints[0]=x+this.getEdge(); xPoints[1]=x+this.getEdge(); xPoints[2]=x;
-				yPoints[0]=y+this.getEdge(); yPoints[1]=y				; yPoints[2]=y;
 				break;	
 			case 270:
-				xPoints[0]=x;				 xPoints[1]=x+this.getEdge(); xPoints[2]=x+this.getEdge();
-				yPoints[0]=y+this.getEdge(); yPoints[1]=y+this.getEdge(); yPoints[2]=y;
 				break;
 			default:
 				break;
 			}
-	    	
-	        g.setColor(this.color);
-	        g.fillPolygon(xPoints, yPoints, 3);
-	        g.setColor(this.color);
-	        g.drawRoundRect(x, type, width, height, arcWidth, arcHeight)
 
+	    }
+	    /*public void paint(Graphics g){
+	    	this.paintComponents(g);
+	    }*/
+	    
+	    public void paintComponents(Graphics g){
+	    	int[] xPoints = new int[2],yPoints=new int[2];
+			Graphics2D g2d = (Graphics2D)g;
+
+	    	if(this.trigger){//if the leftFlipper is triggered, draw its rotated position
+		    	switch (this.orientation){
+				case 0:
+					xPoints[0]=x; 				 xPoints[1]=x+this.getEdge();
+					yPoints[0]=y;  				 yPoints[1]=y				;
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[0], yPoints[0], this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[0], yPoints[0], this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+					break;
+				case 90:
+					xPoints[0]=x+this.getEdge(); xPoints[1]=x				;
+					yPoints[0]=y;			     yPoints[1]=y				;
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[1], yPoints[1], this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[1], yPoints[1], this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+					break;
+				case 180:
+					xPoints[0]=x+this.getEdge(); xPoints[1]=x+this.getEdge();
+					yPoints[0]=y+this.getEdge(); yPoints[1]=y				;
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[1]-this.getThickness(), yPoints[1], 
+			        		this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[1]-this.getThickness(), yPoints[1], 
+			        		this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+					break;	
+				case 270:
+					xPoints[0]=x;				 xPoints[1]=x+this.getEdge();
+					yPoints[0]=y+this.getEdge(); yPoints[1]=y+this.getEdge();
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[0], yPoints[0]-this.getThickness(), this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[0], yPoints[0]-this.getThickness(), this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+					break;
+				default:
+					break;
+				}
+		    	
+		    	//it is always rotating with respect to the x[0],y[0]
+		        g2d.rotate(angle.radians(), xPoints[0], yPoints[0]); 
+		        
+	    	}else{//if the leftFlipper is not triggered, just draw the static flipper
+		    	switch (this.orientation){
+				case 0:
+					xPoints[0]=x; 				 xPoints[1]=x+this.getEdge();
+					yPoints[0]=y;  				 yPoints[1]=y				;
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[0], yPoints[0], this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[0], yPoints[0], this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+					break;
+				case 90:
+					xPoints[0]=x+this.getEdge(); xPoints[1]=x				;
+					yPoints[0]=y;			     yPoints[1]=y				;
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[1], yPoints[1], this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[1], yPoints[1], this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+					break;
+				case 180:
+					xPoints[0]=x+this.getEdge(); xPoints[1]=x+this.getEdge();
+					yPoints[0]=y+this.getEdge(); yPoints[1]=y				;
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[1]-this.getThickness(), yPoints[1], 
+			        		this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[1]-this.getThickness(), yPoints[1], 
+			        		this.getThickness(), this.getEdge(), Constants.L/4, Constants.L/4);
+					break;	
+				case 270:
+					xPoints[0]=x;				 xPoints[1]=x+this.getEdge();
+					yPoints[0]=y+this.getEdge(); yPoints[1]=y+this.getEdge();
+			        g2d.setColor(this.color);
+			        g2d.fillRoundRect(xPoints[0], yPoints[0]-this.getThickness(), this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+			        g2d.setColor(this.color);
+			        g2d.drawRoundRect(xPoints[0], yPoints[0]-this.getThickness(), this.getEdge(), this.getThickness(), Constants.L/4, Constants.L/4);
+					break;
+				default:
+					break;
+				}
+
+	    	}
 	    }
 
 		@Override
@@ -176,6 +257,13 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 			this.color = color;
 			
 		}
+		
+	    public Rectangle boundingBox() {
+
+	        // a Rectangle is the x,y for the upper left corner and then the
+	        // width and height
+	        return new Rectangle(x, y, x+this.getEdge(), y+this.getEdge());
+	    }
 
 		@Override
 		public void rotate() {
