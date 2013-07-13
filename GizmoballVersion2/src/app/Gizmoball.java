@@ -26,6 +26,7 @@ import javax.swing.SwingConstants;
 import system.Constants;
 
 import components.circleBumper;
+import components.leftFlipper;
 import components.squareBumper;
 import components.triangleBumper;
 
@@ -445,8 +446,8 @@ public class Gizmoball extends JFrame{
         // when this button is pressed, a square bumper is added to the game board
         leftFlipperButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	//TODO: add a gizmo
-            	System.out.println("A left flipper is added");    
+            	animationWindow.getGridPanel().addGizmos(new leftFlipper());
+            	animationWindow.getGridPanel().repaint();    
             }
         });
         panelOne.add(leftFlipperButton);

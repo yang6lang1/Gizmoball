@@ -244,13 +244,11 @@ public class leftFlipper extends JComponent implements gizmosInterface {
 
 		@Override
 		public void select() {
-			if(this.color == Constants.colorOfTriangularBumper){
+			if(this.color == Constants.colorOfLeftFlipper){
 				this.setColor(Color.white);
 			}else{
-				this.setColor(Constants.colorOfTriangularBumper);
+				this.setColor(Constants.colorOfLeftFlipper);
 			}
-
-			
 		}
 
 		private void setColor(Color color) {

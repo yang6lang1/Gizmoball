@@ -61,27 +61,88 @@ public class gridPanel extends JPanel  implements MouseListener {
     public void addGizmos(gizmosInterface gizmo){//TODO: in Gizmoball.java I need to check the gizmoCount
 				//if no places to place the gizmos I need to show some message
 		int row=0,col = 0;
-		boolean hasElement = element[col][row].hasElement();// try to insert into (0,0)
+		boolean[] hasElement =new boolean[Constants.number_of_grids_per_dimension];
 		
-		for(row = 0;row<Constants.number_of_grids_per_dimension&& hasElement == true;row++){	
-			for(col = 0;col<Constants.number_of_grids_per_dimension&& hasElement == true;col++){
-				//col++;
-				hasElement = element[col][row].hasElement();	
-				if(!hasElement){
+		if(gizmo.getType() =='S'||gizmo.getType() =='C'||gizmo.getType() =='T'){//TODO: ball maybe defined as a gizmo later
+			for(int i = 0; i < Constants.number_of_grids_per_dimension;i++){
+				//initialize the boolean flag hasElement
+				//this is for S, T ,C and absorber
+				hasElement[i]=element[col+i][row].hasElement();
+			}
+			
+			for(row = 0;row<Constants.number_of_grids_per_dimension&& hasElement[0] == true;row++){	
+				for(col = 0;col<Constants.number_of_grids_per_dimension&& hasElement[0] == true;col++){
+					//col++;
+					hasElement[0] = element[col][row].hasElement();	
+					if(!hasElement[0]){
+						break;
+					}
+				}
+				if(!hasElement[0]){
 					break;
 				}
 			}
-			if(!hasElement){
-				break;
+			gizmo.setLocation(col*gridSize, row*gridSize);
+			try{
+				element[col][row].setElement(gizmo);
+			}catch(ArrayIndexOutOfBoundsException e){
+			//TODO: Screen is full! Show an alert!
 			}
-		}
-		
-		gizmo.setLocation(col*gridSize, row*gridSize);
-		
-		try{
-			element[col][row].setElement(gizmo);
-		}catch(ArrayIndexOutOfBoundsException e){
-		//TODO: Screen is full! Show an alert!
+		}else if(gizmo.getType() =='L'||gizmo.getType() =='R'){
+			//if the gizmo is a left flipper or right flipper, add it into 2x2 grid
+			for(int i = 0; i < 4;i++){
+				//initialize the boolean flag hasElement
+				//only check 4 grids
+				if(i<2){
+					//1st row
+					hasElement[i]=element[col+i][row].hasElement();
+				}else{
+					//second row
+					hasElement[i] = element[col+i-2][row+1].hasElement();
+				}
+			}
+			boolean isEmpty = false;
+			if(hasElement[0] == true&&hasElement[1]==true&&hasElement[2] == true&&hasElement[3]==true){
+				isEmpty = true;
+			}
+			for(row = 0;row<(Constants.number_of_grids_per_dimension-1)&& isEmpty;row++){	
+				for(col = 0;col<(Constants.number_of_grids_per_dimension-1)&& isEmpty;col++){
+					//update the isEmpty flag until the correct row, col are found
+					for(int i = 0; i < 4;i++){
+						//only check 4 grids
+						if(i<2){
+							//1st row
+							hasElement[i]=element[col+i][row].hasElement();
+						}else{
+							//second row
+							hasElement[i] = element[col+i-2][row+1].hasElement();
+						}
+					}
+					
+					if(hasElement[0] == true&&hasElement[1]==true&&hasElement[2] == true&&hasElement[3]==true){
+						isEmpty = true;
+					}
+				
+					if(isEmpty){
+						break;
+					}
+				}
+				if(isEmpty){
+					break;
+				}
+			}
+			gizmo.setLocation(col*gridSize, row*gridSize);
+			try{
+				element[col][row].setElement(gizmo);
+				element[col+1][row].setElement(element[col][row].getElement());
+				element[col][row+1].setElement(element[col][row].getElement());
+				element[col+1][row+1].setElement(element[col][row].getElement());
+				
+			}catch(ArrayIndexOutOfBoundsException e){
+			//TODO: Screen is full! Show an alert!
+			}
+
+			
 		}
     }
     
@@ -168,9 +229,11 @@ public class gridPanel extends JPanel  implements MouseListener {
 			if(!(this.game.getMoveMode())){
 			if(!isSelected)
 			{
+
 					tempBuffer = element[col][row];
 					tempBuffer.getElement().select();
 					isSelected = true;
+				
 			}else{
 				//System.out.println("Move mode is: "+this.game.getMoveMode());
 				//if(!(this.game.getMoveMode())){
