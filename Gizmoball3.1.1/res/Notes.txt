@@ -1,0 +1,39 @@
+
+This article contains a list of unfinished tasks(not complete)
+
+Unimplemented functionality:
+Game components:
+-Gizmos: 
+1. leftFlipper: x,y, color, 2Lx2L, angularVelocity(need some calculation here...),resetTime,activationDelay, rotate() function
+2. rightFlipper: same as leftFlipper
+3. absorber: Need to decide the most user-friendly way to insert an absorber. Where to shoot the ball? Should the ball be shot out when user press "space" key?
+4. ball:A lot of things need to be modified. The game physics should be implemented into move() and related methods
+--------------------------------------
+
+-Key bindings:
+--gridPanel(Build Mode)
+1. pre-condition: the gizmo needs to be selected(The 'isSelected' in gridPanel is set to true):
+move(press m enters moveMode), delete(ctrl+D), rotate(ctrl+R), connect(I don'g really know what key should i bind to this..)
+
+2. Press ESC should quit the current mode.
+Eg: if the gridPanel is in isSelect mode and moveMode, press ESC once quit the moveMode, press again quit the isSelected mode
+Important: Update the animation on screen such as color change and update the back-end such as tempBuffer clearing, isSelect boolean
+reinitialize, etc....
+
+3. Mouse click(MouseListener): this has been implemented.. Need to test....
+
+--animationWindow(Game Mode)
+coming soon...
+**************************************
+
+Buttons and Menu Items:
+-menu
+
+-buttons
+
+-popupAlert
+
+-contextMenu(right click)
+--leftFlipper,rightFlipper:
+1.property(change the physical property of the gizmo): coeffiectOfRebound; resetTime; angularVelocity; antivationDelay
+

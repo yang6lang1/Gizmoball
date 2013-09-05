@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<board>
+  <ball yVelocity="-100.0" name="Ball" xVelocity="0.0" y="18.75" x="19.75"></ball>
+  <gizmos>
+    <squareBumper name="S8_12" y="12" x="8"></squareBumper>
+    <squareBumper name="S7_10" y="10" x="7"></squareBumper>
+    <squareBumper name="S7_9" y="9" x="7"></squareBumper>
+    <squareBumper name="S8_1" y="1" x="8"></squareBumper>
+    <squareBumper name="S8_2" y="2" x="8"></squareBumper>
+    <squareBumper name="S8_3" y="3" x="8"></squareBumper>
+    <squareBumper name="S7_7" y="7" x="7"></squareBumper>
+    <squareBumper name="S17_7" y="7" x="17"></squareBumper>
+    <squareBumper name="S17_6" y="6" x="17"></squareBumper>
+    <squareBumper name="S17_5" y="5" x="17"></squareBumper>
+    <squareBumper name="S17_4" y="4" x="17"></squareBumper>
+    <squareBumper name="S172" y="2" x="17"></squareBumper>
+    <squareBumper name="S17_3" y="3" x="17"></squareBumper>
+    <circleBumper name="C8_4" y="4" x="8"></circleBumper>
+    <circleBumper name="C7_5" y="5" x="7"></circleBumper>
+    <circleBumper name="C7_6" y="6" x="7"></circleBumper>
+    <circleBumper name="C7_8" y="8" x="7"></circleBumper>
+    <circleBumper name="C9_15" y="15" x="9"></circleBumper>
+    <circleBumper name="C10_15" y="15" x="10"></circleBumper>
+    <circleBumper name="C11_15" y="15" x="11"></circleBumper>
+    <circleBumper name="C12_15" y="15" x="12"></circleBumper>
+    <circleBumper name="C13_15" y="15" x="13"></circleBumper>
+    <circleBumper name="C14_15" y="15" x="14"></circleBumper>
+    <circleBumper name="C15_15" y="15" x="15"></circleBumper>
+    <circleBumper name="C16_15" y="15" x="16"></circleBumper>
+    <circleBumper name="C17_8" y="8" x="17"></circleBumper>
+    <triangleBumper orientation="180" name="T" y="0" x="19"></triangleBumper>
+    <triangleBumper orientation="0" name="T8_0" y="0" x="8"></triangleBumper>
+    <leftFlipper orientation="0" name="L13_12" y="12" x="13"></leftFlipper>
+    <leftFlipper orientation="0" name="L9_12" y="12" x="9"></leftFlipper>
+    <absorber height="1" width="20" name="A" y="19" x="0"></absorber>
+    <leftFlipper orientation="0" name="L11_12" y="12" x="11"></leftFlipper>
+    <squareBumper name="S17_14" y="14" x="17"></squareBumper>
+    <squareBumper name="S17_13" y="13" x="17"></squareBumper>
+    <squareBumper name="S17_12" y="12" x="17"></squareBumper>
+    <squareBumper name="S17_11" y="11" x="17"></squareBumper>
+    <squareBumper name="S17_10" y="10" x="17"></squareBumper>
+    <squareBumper name="S17_9" y="9" x="17"></squareBumper>
+    <squareBumper name="S8_14" y="14" x="8"></squareBumper>
+    <squareBumper name="S8_13" y="13" x="8"></squareBumper>
+    <leftFlipper orientation="0" name="L15_12" y="12" x="15"></leftFlipper>
+    <circleBumper name="C8_11" y="11" x="8"></circleBumper>
+  </gizmos>
+  <connections>
+  </connections>
+</board>

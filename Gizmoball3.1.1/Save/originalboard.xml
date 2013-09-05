@@ -1,0 +1,66 @@
+<board>
+    <ball name="Ball" x="19.75" y="18.75" xVelocity="0.0" yVelocity="-100.0" />
+    <gizmos>
+        <squareBumper name="S02" x="0" y="2" />
+        <squareBumper name="S12" x="1" y="2" />
+        <squareBumper name="S22" x="2" y="2" />
+        <squareBumper name="S32" x="3" y="2" />
+        <squareBumper name="S42" x="4" y="2" />
+        <squareBumper name="S52" x="5" y="2" />
+        <squareBumper name="S62" x="6" y="2" />
+        <squareBumper name="S72" x="7" y="2" />
+        <squareBumper name="S82" x="8" y="2" />
+        <squareBumper name="S132" x="13" y="2" />
+    <squareBumper name="S142" x="14" y="2" />
+    <squareBumper name="S152" x="15" y="2" />
+    <squareBumper name="S162" x="16" y="2" />
+    <squareBumper name="S172" x="17" y="2" />
+    <squareBumper name="S182" x="18" y="2" />
+    <circleBumper name="C43" x="4" y="3" />
+    <circleBumper name="C54" x="5" y="4" />
+    <circleBumper name="C65" x="6" y="5" />
+    <circleBumper name="C76" x="7" y="6" />
+    <circleBumper name="C99" x="9" y="9" />
+    <circleBumper name="C109" x="10" y="9" />
+    <circleBumper name="C1110" x="11" y="10" />
+    <circleBumper name="C129" x="12" y="9" />
+    <circleBumper name="C139" x="13" y="9" />
+    <circleBumper name="C156" x="15" y="6" />
+    <circleBumper name="C165" x="16" y="5" />
+    <circleBumper name="C174" x="17" y="4" />
+    <circleBumper name="C183" x="18" y="3" />
+    <triangleBumper name="T" x="19" y="0" orientation="180" />
+    <triangleBumper name="T2" x="1" y="1" orientation="0" />
+    <leftFlipper name="LF92" x="9" y="2" orientation="0" />
+    <rightFlipper name="RF112" x="11" y="2" orientation="0" />
+    <leftFlipper name="LF87" x="8" y="7" orientation="0" />
+    <rightFlipper name="RF137" x="13" y="7" orientation="0" />
+    <absorber name="A" x="0" y="19" width="20" height="1" />
+</gizmos>
+<connections>
+    <connect sourceGizmo="C43" targetGizmo="LF87" />
+    <connect sourceGizmo="C54" targetGizmo="LF87" />
+    <connect sourceGizmo="C65" targetGizmo="LF87" />
+    <connect sourceGizmo="C76" targetGizmo="LF87" />
+    <connect sourceGizmo="C109" targetGizmo="LF87" />
+    <connect sourceGizmo="C1110" targetGizmo="LF87" />
+    <connect sourceGizmo="C139" targetGizmo="LF87" />
+    <connect sourceGizmo="C99" targetGizmo="RF137" />
+    <connect sourceGizmo="C1110" targetGizmo="RF137" />
+    <connect sourceGizmo="C129" targetGizmo="RF137" />
+    <connect sourceGizmo="C156" targetGizmo="RF137" />
+    <connect sourceGizmo="C165" targetGizmo="RF137" />
+    <connect sourceGizmo="C174" targetGizmo="RF137" />
+    <connect sourceGizmo="C183" targetGizmo="RF137" />
+    <connect sourceGizmo="A" targetGizmo="A" />
+    <keyConnect key="32" keyDirection="down" targetGizmo="LF92" />
+    <keyConnect key="32" keyDirection="up" targetGizmo="LF92" />
+    <keyConnect key="32" keyDirection="down" targetGizmo="RF112" />
+    <keyConnect key="32" keyDirection="up" targetGizmo="RF112" />
+    <keyConnect key="87" keyDirection="down" targetGizmo="RF137" />
+    <keyConnect key="87" keyDirection="up" targetGizmo="RF137" />
+    <keyConnect key="127" keyDirection="down" targetGizmo="A" />
+    <keyConnect key="81" keyDirection="down" targetGizmo="LF87" />
+    <keyConnect key="81" keyDirection="up" targetGizmo="LF87" />
+</connections>
+</board>
