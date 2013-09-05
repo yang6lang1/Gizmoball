@@ -4,7 +4,22 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry exported="true" kind="lib" path="res"/>
 	<classpathentry exported="true" kind="lib" path="Save"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/jbox2d-library"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/jbox2d-serialization"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1-javadoc.jar.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1-sources.jar.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1.jar.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1.pom"/>
+	<classpathentry kind="lib" path="/jbox2d-library/target/jbox2d-library-2.2.1.1.pom.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0-javadoc.jar.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0-sources.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0-sources.jar.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0.jar.asc"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0.pom"/>
+	<classpathentry kind="lib" path="/jbox2d-serialization/target/jbox2d-serialization-1.1.0.pom.asc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
