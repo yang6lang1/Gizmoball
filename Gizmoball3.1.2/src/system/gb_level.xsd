@@ -1,0 +1,119 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:simpleType name="orientation">
+<xs:restriction base="xs:string">
+<xs:enumeration value="0"/>
+<xs:enumeration value="90"/>
+<xs:enumeration value="180"/>
+<xs:enumeration value="270"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:complexType name="ball">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:float" use="required"/>
+<xs:attribute name="y" type="xs:float" use="required"/>
+<xs:attribute name="xVelocity" type="xs:float" use="required"/>
+<xs:attribute name="yVelocity" type="xs:float" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="squareBumper">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:integer" use="required"/>
+<xs:attribute name="y" type="xs:integer" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="circleBumper">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:integer" use="required"/>
+<xs:attribute name="y" type="xs:integer" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="triangleBumper">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:integer" use="required"/>
+<xs:attribute name="y" type="xs:integer" use="required"/>
+<xs:attribute name="orientation" type="orientation" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="leftFlipper">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:integer" use="required"/>
+<xs:attribute name="y" type="xs:integer" use="required"/>
+<xs:attribute name="orientation" type="xs:float" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="rightFlipper">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:integer" use="required"/>
+<xs:attribute name="y" type="xs:integer" use="required"/>
+<xs:attribute name="orientation" type="xs:float" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="absorber">
+<xs:attribute name="name" type="xs:string" use="required"/>
+<xs:attribute name="x" type="xs:integer" use="required"/>
+<xs:attribute name="y" type="xs:integer" use="required"/>
+<xs:attribute name="width" type="xs:float" use="required"/>
+<xs:attribute name="height" type="xs:float" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:simpleType name="keyDirection">
+<xs:restriction base="xs:string">
+<xs:enumeration value="down"/>
+<xs:enumeration value="up"/>
+</xs:restriction>
+</xs:simpleType>
+<xs:complexType name="connect">
+<xs:attribute name="sourceGizmo" type="xs:string" use="required"/>
+<xs:attribute name="targetGizmo" type="xs:string" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:complexType name="keyConnect">
+<xs:attribute name="key" type="xs:string" use="required"/>
+<xs:attribute name="keyDirection" type="keyDirection" use="required"/>
+<xs:attribute name="targetGizmo" type="xs:string" use="required"/>
+<xs:anyAttribute/>
+</xs:complexType>
+<xs:group name="allGizmos">
+<xs:choice>
+<xs:element name="squareBumper" type="squareBumper"/>
+<xs:element name="circleBumper" type="circleBumper"/>
+<xs:element name="triangleBumper" type="triangleBumper"/>
+<xs:element name="leftFlipper" type="leftFlipper"/>
+<xs:element name="rightFlipper" type="rightFlipper"/>
+<xs:element name="absorber" type="absorber"/>
+</xs:choice>
+</xs:group>
+<xs:group name="allConnections">
+<xs:choice>
+<xs:element name="connect" type="connect" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="keyConnect" type="keyConnect" minOccurs="0" maxOccurs="unbounded"/>
+</xs:choice>
+</xs:group>
+<xs:element name="board">
+<xs:complexType>
+<xs:sequence>
+<xs:element name="ball" type="ball" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="gizmos">
+<xs:complexType>
+<xs:sequence>
+<xs:group ref="allGizmos" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute/>
+</xs:complexType>
+</xs:element>
+<xs:element name="connections">
+<xs:complexType>
+<xs:sequence>
+<xs:group ref="allConnections" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:anyAttribute/>
+</xs:complexType>
+</xs:element>
+<xs:any minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+<xs:attribute name="friction1" type="xs:float" default=".025"/>
+<xs:attribute name="friction2" type="xs:float" default=".025"/>
+<xs:attribute name="gravity" type="xs:float" default="25.0"/>
+</xs:complexType>
+</xs:element>
+</xs:schema>

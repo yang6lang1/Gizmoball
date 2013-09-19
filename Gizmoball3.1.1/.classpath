@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="lib" path="res"/>
+	<classpathentry exported="true" kind="lib" path="Save"/>
+	<classpathentry kind="lib" path="JBox"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-library-2.2.1.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-library-2.2.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-library-2.2.1.1.jar"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-serialization-1.1.0-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-serialization-1.1.0-javadoc.jar"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-serialization-1.1.0-sources.jar"/>
+	<classpathentry kind="lib" path="JBox/jbox2d-serialization-1.1.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

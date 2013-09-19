@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<board>
+  <ball yVelocity="-100.0" name="B576_576" xVelocity="0.0" y="18.0" x="18.0"></ball>
+  <gizmos>
+    <squareBumper name="S0_0" y="0" x="0"></squareBumper>
+    <squareBumper name="S1_0" y="0" x="1"></squareBumper>
+    <squareBumper name="S2_0" y="0" x="2"></squareBumper>
+    <circleBumper name="C3_0" y="0" x="3"></circleBumper>
+    <circleBumper name="C4_0" y="0" x="4"></circleBumper>
+    <circleBumper name="C5_0" y="0" x="5"></circleBumper>
+    <circleBumper name="C6_0" y="0" x="6"></circleBumper>
+    <circleBumper name="C7_0" y="0" x="7"></circleBumper>
+    <leftFlipper orientation="0" name="L8_0" y="0" x="8"></leftFlipper>
+  </gizmos>
+  <connections>
+  </connections>
+</board>

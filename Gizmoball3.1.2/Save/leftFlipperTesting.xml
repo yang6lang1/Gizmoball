@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<board>
+  <ball yVelocity="-100.0" name="Ball" xVelocity="0.0" y="18.75" x="19.75"></ball>
+  <gizmos>
+    <squareBumper name="S02" y="2" x="0"></squareBumper>
+    <squareBumper name="S12" y="2" x="1"></squareBumper>
+    <squareBumper name="S22" y="2" x="2"></squareBumper>
+    <squareBumper name="S8_0" y="0" x="8"></squareBumper>
+    <squareBumper name="S8_1" y="1" x="8"></squareBumper>
+    <squareBumper name="S8_5" y="5" x="8"></squareBumper>
+    <squareBumper name="S8_4" y="4" x="8"></squareBumper>
+    <squareBumper name="S8_3" y="3" x="8"></squareBumper>
+    <squareBumper name="S82" y="2" x="8"></squareBumper>
+    <squareBumper name="S17_8" y="8" x="17"></squareBumper>
+    <squareBumper name="S17_7" y="7" x="17"></squareBumper>
+    <squareBumper name="S17_6" y="6" x="17"></squareBumper>
+    <squareBumper name="S17_5" y="5" x="17"></squareBumper>
+    <squareBumper name="S17_4" y="4" x="17"></squareBumper>
+    <squareBumper name="S17_2" y="2" x="17"></squareBumper>
+    <circleBumper name="C43" y="3" x="4"></circleBumper>
+    <circleBumper name="C8_8" y="8" x="8"></circleBumper>
+    <circleBumper name="C8_7" y="7" x="8"></circleBumper>
+    <circleBumper name="C8_6" y="6" x="8"></circleBumper>
+    <circleBumper name="C99" y="9" x="9"></circleBumper>
+    <circleBumper name="C109" y="9" x="10"></circleBumper>
+    <circleBumper name="C11_9" y="9" x="11"></circleBumper>
+    <circleBumper name="C129" y="9" x="12"></circleBumper>
+    <circleBumper name="C139" y="9" x="13"></circleBumper>
+    <circleBumper name="C14_9" y="9" x="14"></circleBumper>
+    <circleBumper name="C15_9" y="9" x="15"></circleBumper>
+    <circleBumper name="C16_9" y="9" x="16"></circleBumper>
+    <circleBumper name="C17_3" y="3" x="17"></circleBumper>
+    <triangleBumper orientation="180" name="T" y="0" x="19"></triangleBumper>
+    <triangleBumper orientation="0" name="T2" y="1" x="1"></triangleBumper>
+    <leftFlipper orientation="0" name="L11_5" y="5" x="11"></leftFlipper>
+    <leftFlipper orientation="0" name="L9_5" y="5" x="9"></leftFlipper>
+    <absorber height="1" width="20" name="A" y="19" x="0"></absorber>
+    <leftFlipper orientation="0" name="L15_5" y="5" x="15"></leftFlipper>
+    <leftFlipper orientation="0" name="L13_5" y="5" x="13"></leftFlipper>
+  </gizmos>
+  <connections>
+  </connections>
+</board>
