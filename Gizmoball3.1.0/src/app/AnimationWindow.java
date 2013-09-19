@@ -10,8 +10,8 @@ package app;
  * Timer thread is running.
  * */
 
-import interfaces.gizmosInterface;
 import interfaces.flippersInterface;
+import interfaces.gizmosInterface;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -26,16 +26,14 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import system.Configuration;
-import system.XMLReader;
-import system.XMLWriter;
 
 import components.ball;
 
-public class AnimationWindow extends JComponent {
+public class AnimationWindow extends JPanel {
 	private static final long serialVersionUID = 3257281448464364082L;
 
 	// Controls how often we redraw

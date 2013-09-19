@@ -106,6 +106,7 @@ public class Gizmoball extends JFrame{
         animationWindow = new AnimationWindow(this);
         animationWindow.setBounds((width/4)*scale, 0, width*scale, height*scale);
         animationWindow.newGameConfiguration(gameConfig);
+
         //animationWindow.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
         contentPane.add(animationWindow); 
     
