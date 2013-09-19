@@ -10,8 +10,8 @@ package app;
  * Timer thread is running.
  * */
 
-import interfaces.gizmosInterface;
 import interfaces.flippersInterface;
+import interfaces.gizmosInterface;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -26,36 +26,35 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import system.Configuration;
-import system.XMLReader;
-import system.XMLWriter;
 
 import components.ball;
 
-public class AnimationWindow extends JComponent {
+public class AnimationWindow extends JPanel {
 	private static final long serialVersionUID = 3257281448464364082L;
 
 	// Controls how often we redraw
 	private int FRAMES_PER_SECOND = Configuration.FRAMES_PER_SECOND;						//FPS
 	private AnimationEventListener eventListener;
 	private int number_of_grids_per_dimension =Configuration.number_of_grids_per_dimension; //20x20 grid
-	private gridPanel panel;																//the build mode grid
-	private ball ball;																		//bouncing ball
-	private Timer timer;																	//major task scheduler/main thread
-	private boolean mode;																	//running or stop
-	private Gizmoball game;																	//game control panel
-	private ArrayList<gizmosInterface> gizmos; 												//collection of all the Gizmos on the screen(except the ball)
-	//private XMLReader read = new XMLReader();												//used for loading game configuration
-	private Configuration gameConfig = new Configuration();									//all the game configuration data read in from XML file
+	private gridPanel panel;																				//the build mode grid
+	private ball ball;																							//bouncing ball
+	private Timer timer;																						//major task scheduler/main thread
+	private boolean mode;																						//running or stop
+	private Gizmoball game;																					//game control panel
+	private ArrayList<gizmosInterface> gizmos; 											//collection of all the Gizmos on the screen(except the ball)
+	//private XMLReader read = new XMLReader();											//used for loading game configuration
+	private Configuration gameConfig = new Configuration();	 				//all the game configuration data read in from XML file
 	//Source file: Configuration.loadedConfig
 
 	//Constructor:
 	public AnimationWindow(Gizmoball game){
-
 		gizmos = new ArrayList<gizmosInterface>(number_of_grids_per_dimension*number_of_grids_per_dimension);
+		this.setOpaque(true);
+		this.setBackground(Color.BLACK);
 		gizmos = gameConfig.getGizmos();
 		this.game = game;
 		panel = new gridPanel(this.game);
@@ -63,7 +62,6 @@ public class AnimationWindow extends JComponent {
 		panel.setBackground(Color.black);
 		//panel.setGizmos(gameConfig.getGizmos());
 		add(panel); 
-
 		// this only initializes the timer, we actually start and stop the
 		// timer in the setMode() method
 		eventListener = new AnimationEventListener();
