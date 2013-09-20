@@ -29,9 +29,9 @@ public class leftFlipper extends JComponent implements gizmosInterface,flippersI
 	private static final int ORIGINAL_Y = 0;
 	private static final int edgeLength = 2* Configuration.L;
 	private static final int thickness = (int)(0.5*Configuration.L);
-	private static final double delta_t = Configuration.delta_t/1000;
 	private static final int L = Configuration.L;
-
+	private final double delta_t = Configuration.delta_t/1000;
+	
 	private int x;
 	private int y;
 	private int orientation;
@@ -316,38 +316,41 @@ public class leftFlipper extends JComponent implements gizmosInterface,flippersI
 	}
 
 	public void moveUpByDeltaT(double delta_t){
-		if(this.angle.compareTo(Angle.ZERO)!=0){
+		if(delta_t<= this.delta_t){
+			if(this.angle.compareTo(Angle.ZERO)!=0){
 
-			this.angularSpeed = -DEFAULT_ANGULAR_SPEED;
-			this.angle=new Angle(this.angle.radians()+angularSpeed*delta_t);
+				this.angularSpeed = -DEFAULT_ANGULAR_SPEED;
+				this.angle=new Angle(this.angle.radians()+angularSpeed*delta_t);
 
-			if(this.angle.compareTo(Angle.ZERO.plus(new Angle(this.angle.radians()+angularSpeed*delta_t)))<=0){
-				this.angle = Angle.ZERO;
-				this.angularSpeed = 0;
-			}
+				if(this.angle.compareTo(Angle.ZERO.plus(new Angle(this.angle.radians()+angularSpeed*delta_t)))<=0){
+					this.angle = Angle.ZERO;
+					this.angularSpeed = 0;
+				}
 
-			if(this.angle.compareTo(Angle.DEG_90)>=0){
-				this.angle = Angle.DEG_90;
+				if(this.angle.compareTo(Angle.DEG_90)>=0){
+					this.angle = Angle.DEG_90;
+				}
 			}
 		}
 	}
 
 	public void moveDownByDeltaT(double delta_t){
-		if(this.angle.compareTo(Angle.DEG_90)!=0){
-			this.angularSpeed = DEFAULT_ANGULAR_SPEED;
-			this.angle=new Angle(this.angle.radians()+angularSpeed*delta_t);
+		if(delta_t<= this.delta_t){
+			if(this.angle.compareTo(Angle.DEG_90)!=0){
+				this.angularSpeed = DEFAULT_ANGULAR_SPEED;
+				this.angle=new Angle(this.angle.radians()+angularSpeed*delta_t);
 
-			if(this.angle.compareTo(Angle.ZERO)<=0){
-				//if(this.angle.compareTo(Angle.ZERO.plus(new Angle(this.angle.radians()+angularSpeed*delta_t)))<=0){	
-				this.angle = Angle.ZERO;
-			}
+				if(this.angle.compareTo(Angle.ZERO)<=0){
+					//if(this.angle.compareTo(Angle.ZERO.plus(new Angle(this.angle.radians()+angularSpeed*delta_t)))<=0){	
+					this.angle = Angle.ZERO;
+				}
 
-			if(this.angle.compareTo(Angle.DEG_90)>=0){
-				this.angle = Angle.DEG_90;
-				this.angularSpeed=0;
+				if(this.angle.compareTo(Angle.DEG_90)>=0){
+					this.angle = Angle.DEG_90;
+					this.angularSpeed=0;
+				}
 			}
 		}
-
 	}
 
 	@Override

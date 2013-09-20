@@ -37,7 +37,6 @@ public class AnimationWindow extends JPanel implements Runnable{
 	private static final long serialVersionUID = 3257281448464364082L;
 
 	private int targetFPS;										
-	private double FPS;
 	private AnimationEventListener eventListener;
 	private int number_of_grids_per_dimension =Configuration.number_of_grids_per_dimension; //20x20 grid
 	private ball ball;																							//bouncing ball
@@ -47,7 +46,7 @@ public class AnimationWindow extends JPanel implements Runnable{
 	private ArrayList<gizmosInterface> gizmos; 											//collection of all the Gizmos on the screen(except the ball)
 	private Configuration gameConfig = new Configuration();	 				//all the game configuration data read in from XML file
 	//Source file: Configuration.loadedConfig
-	private double delta_t = Configuration.delta_t/1000;
+	private double delta_t = Configuration.delta_t/(1000);
 	
 	//Constructor:
 	public AnimationWindow(Gizmoball game){
@@ -122,13 +121,14 @@ public class AnimationWindow extends JPanel implements Runnable{
 	/**
 	 * This method is called when the Timer goes off and we
 	 * need to repaint the ball and the flippers.
+	 * @return return the time until next collision
 	 * @modifies both the ball and the window that this listener owns 
 	 * @effects causes the ball to move and the window to be updated
 	 * to show the new position of the ball and flippers. 
 	 */
-	private void update() {    	
+	private double update() {    	
 		Rectangle oldPos = ball.boundingBox();
-
+		Rectangle repaintArea = new Rectangle();
 		//1. update the speed of the ball
 		//2. time until next collision
 		//3. update the positions of the ball and flippers
@@ -144,54 +144,56 @@ public class AnimationWindow extends JPanel implements Runnable{
 		if(output[0] <= delta_t){
 			//update ball position
 			ball.move(output[0]);
+			repaintArea = oldPos.union(ball.boundingBox());
+			repaint(repaintArea.x, repaintArea.y, repaintArea.width,
+					repaintArea.height);
 			//update flippers position
-			if(gizmos.get((new Double(output[1])).intValue()).getType()=='L'||
-					gizmos.get((new Double(output[1])).intValue()).getType()=='R'){
-				flippersInterface flipper =(flippersInterface) gizmos.get((new Double(output[1])).intValue());
-				if(flipper.isTriggered()&&!flipper.isKeyPressed()){
-					//TODO: create moveByDeltaT method in flippers
-					flipper.move(); //update the angle
-				}else if(flipper.isKeyPressed()){
-					flipper.moveUpByDeltaT(output[0]);
-				}else{
-					flipper.moveDownByDeltaT(output[0]);
-				}
-			}//end of leftFlipper and rightFlipper case
-
-			this.handleCollision((int)(output[1]),(int)(output[2]));
-			/*try {
-				Thread.sleep((long)(delta_t*1000));
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
-		}else{
-			ball.move(delta_t);
-		}
-//		ball.update();
-		Rectangle repaintArea = oldPos.union(ball.boundingBox());
-		repaint(repaintArea.x, repaintArea.y, repaintArea.width,
-				repaintArea.height);
-
-		for(int i= 0; i < gizmos.size();i++){
-			if(gizmos.get(i).getType()=='L'||gizmos.get(i).getType()=='R'){
-
-				flippersInterface flipper =(flippersInterface) gizmos.get(i);
-				oldPos = gizmos.get(i).boundingBox();
-				if(flipper.isTriggered()&&!flipper.isKeyPressed()){
-
-					flipper.move(); //update the angle
-				}else if(flipper.isKeyPressed()){
-					flipper.moveUp();
-				}else{
-
-					gizmos.get(i).originalState();
-				}
-
+			for(int i= 0; i < gizmos.size();i++){
+				if(gizmos.get(i).getType()=='L'||gizmos.get(i).getType()=='R'){
+					flippersInterface flipper =(flippersInterface) gizmos.get(i);
+					if(flipper.isTriggered()&&!flipper.isKeyPressed()){
+						//TODO: create moveByDeltaT method in flippers
+						flipper.move(); //update the angle
+					}else if(flipper.isKeyPressed()){
+						flipper.moveUpByDeltaT(output[0]);
+					}else{
+						flipper.moveDownByDeltaT(output[0]);
+					}
+				}//end of leftFlipper and rightFlipper case
 				repaintArea = oldPos.union(gizmos.get(i).boundingBox());
 				repaint(repaintArea.x, repaintArea.y, repaintArea.width,repaintArea.height);
-			}//end of leftFlipper and rightFlipper case
-		}      
+			}
+
+			ball.handleCollision((int)(output[1]),(int)(output[2]));
+
+		}else{
+			//update ball position
+			ball.move(delta_t);
+			repaintArea = oldPos.union(ball.boundingBox());
+			repaint(repaintArea.x, repaintArea.y, repaintArea.width,
+					repaintArea.height);
+			//update flippers position
+			for(int i= 0; i < gizmos.size();i++){
+				if(gizmos.get(i).getType()=='L'||gizmos.get(i).getType()=='R'){
+					flippersInterface flipper =(flippersInterface) gizmos.get(i);
+					oldPos = gizmos.get(i).boundingBox();
+					if(flipper.isTriggered()&&!flipper.isKeyPressed()){
+
+						flipper.move(); //update the angle
+					}else if(flipper.isKeyPressed()){
+						flipper.moveUp();
+					}else{
+
+						gizmos.get(i).originalState();
+					}
+
+					repaintArea = oldPos.union(gizmos.get(i).boundingBox());
+					repaint(repaintArea.x, repaintArea.y, repaintArea.width,repaintArea.height);
+				}//end of leftFlipper and rightFlipper case
+			}  
+		}
+
+		return output[0]>delta_t ? delta_t : output[0];
 	}
 
 	/**
@@ -299,21 +301,17 @@ public class AnimationWindow extends JPanel implements Runnable{
 		mode = true;
 		while (mode) {
 
-			/*timeSpent = beforeTime - updateTime;
-			if (timeSpent > 0) {
-				timeInSecs = timeSpent * 1.0f / 1000000000.0f;
-				updateTime = System.nanoTime();
-				FPS = (FPS * 0.9f) + (1.0f / timeInSecs) * 0.1f;
-			} else {
-				updateTime = System.nanoTime();
-			}*/
-
-			update();
+			double nextCollisionTime = 0;
+			nextCollisionTime = update();
 
 			afterTime = System.nanoTime();
-
 			timeDiff = afterTime - beforeTime;
 			sleepTime = (1000000000 / targetFPS - timeDiff) / 1000000;
+			
+			if( nextCollisionTime < delta_t){
+				sleepTime = ((long)(nextCollisionTime*1000000000) - timeDiff)/ 1000000;
+			}
+
 			if (sleepTime > 0) {
 				try {
 					Thread.sleep(sleepTime);
@@ -358,7 +356,6 @@ public class AnimationWindow extends JPanel implements Runnable{
 			if(keynum == 90){
 				for(int i= 0; i < gizmos.size();i++){
 					if(gizmos.get(i).getType()=='L'){
-						//flippersInterface flipper =(flippersInterface) gizmos.get(i);
 						((flippersInterface) gizmos.get(i)).setKeyPressed(true);
 					}//end of leftFlipper and rightFlipper case
 				}  
@@ -368,7 +365,6 @@ public class AnimationWindow extends JPanel implements Runnable{
 			if(keynum == 47){// keyboard '/'
 				for(int i= 0; i < gizmos.size();i++){
 					if(gizmos.get(i).getType()=='R'){
-						//flippersInterface flipper =(flippersInterface) gizmos.get(i);
 						((flippersInterface) gizmos.get(i)).setKeyPressed(true);
 					}//end of leftFlipper and rightFlipper case
 				}  

@@ -21,7 +21,7 @@ public class Configuration {
 	//The playing area must be at least 20 L wide by 20 L high
 	public final static int WIDTH = 160;																//game board width
 	public final static int HEIGHT = 160;																//game board height
-	public final static int SCALE = 1;																	//window size scale factor
+	public final static int SCALE = 2;																	//window size scale factor
 	public final static int number_of_grids_per_dimension = 20;
 	public final static int L = WIDTH*SCALE/number_of_grids_per_dimension;		//basic distance unit
 	public final static double delta_t = FRAME_REDRAW  ; 								//ms
