@@ -33,46 +33,41 @@ import system.Configuration;
 
 import components.ball;
 
-public class AnimationWindow extends JPanel {
+public class AnimationWindow extends JPanel implements Runnable{
 	private static final long serialVersionUID = 3257281448464364082L;
 
-	// Controls how often we redraw
-	private int FRAMES_PER_SECOND = Configuration.FRAMES_PER_SECOND;						//FPS
+	private int targetFPS;										
+	private double FPS;
 	private AnimationEventListener eventListener;
 	private int number_of_grids_per_dimension =Configuration.number_of_grids_per_dimension; //20x20 grid
-	private gridPanel panel;																				//the build mode grid
 	private ball ball;																							//bouncing ball
-	private Timer timer;																						//major task scheduler/main thread
+	private Thread timer;																						//major task scheduler/main thread
 	private boolean mode;																						//running or stop
 	private Gizmoball game;																					//game control panel
 	private ArrayList<gizmosInterface> gizmos; 											//collection of all the Gizmos on the screen(except the ball)
-	//private XMLReader read = new XMLReader();											//used for loading game configuration
 	private Configuration gameConfig = new Configuration();	 				//all the game configuration data read in from XML file
 	//Source file: Configuration.loadedConfig
-
+	private double delta_t = Configuration.delta_t/1000;
+	
 	//Constructor:
 	public AnimationWindow(Gizmoball game){
+		initWindow(game);
+	}
+
+	private void initWindow(Gizmoball game){
 		gizmos = new ArrayList<gizmosInterface>(number_of_grids_per_dimension*number_of_grids_per_dimension);
-		this.setOpaque(true);
-		this.setBackground(Color.BLACK);
 		gizmos = gameConfig.getGizmos();
 		this.game = game;
-		panel = new gridPanel(this.game);
-		panel.setBounds(0, 0, Configuration.WIDTH*Configuration.SCALE, Configuration.HEIGHT*Configuration.SCALE);
-		panel.setBackground(Color.black);
-		//panel.setGizmos(gameConfig.getGizmos());
-		add(panel); 
-		// this only initializes the timer, we actually start and stop the
-		// timer in the setMode() method
+		setFPS(Configuration.FRAMES_PER_SECOND);
 		eventListener = new AnimationEventListener();
-		// The first parameter is how often (in milliseconds) the timer
-		// should call us back. Ps: 1000ms
-		timer = new Timer(1000 / FRAMES_PER_SECOND, eventListener);
-
+		addKeyListener(eventListener);
+		addMouseMotionListener(eventListener);
+		addMouseListener(eventListener);
+		timer = new Thread(this, "Gizmoball");
+		//timer = new Timer(1000 / FRAMES_PER_SECOND, eventListener);
 		mode = false;
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
 	}
-
 	/**
 	 * Set up the game board
 	 * This method is used in the actionListener of "New" and "Open" menu item.
@@ -80,7 +75,7 @@ public class AnimationWindow extends JPanel {
 	public void newGameConfiguration(Configuration newGame){
 		if(newGame == null){
 			this.gizmos = new ArrayList<gizmosInterface>(number_of_grids_per_dimension*number_of_grids_per_dimension);
-			this.panel.setGizmos(gizmos);
+			this.game.getGridPanel().setGizmos(gizmos);
 			gameConfig = new Configuration();
 			Configuration.loadedConfig=null;
 			this.ball = null;
@@ -88,12 +83,11 @@ public class AnimationWindow extends JPanel {
 		}else{
 			gameConfig = newGame;
 			this.gizmos = newGame.getGizmos();
-			this.panel.setGizmos(newGame.getGizmos());
+			this.game.getGridPanel().setGizmos(newGame.getGizmos());
 			this.ball = new ball(this,newGame);
 		}
-		this.panel.setIsDirty(false);
+		this.game.getGridPanel().setIsDirty(false);
 		this.repaint();
-
 	}
 
 	public Configuration getLoadedGameConfiguration(){
@@ -123,6 +117,8 @@ public class AnimationWindow extends JPanel {
 		}
 	}
 
+
+
 	/**
 	 * This method is called when the Timer goes off and we
 	 * need to repaint the ball and the flippers.
@@ -133,11 +129,46 @@ public class AnimationWindow extends JPanel {
 	private void update() {    	
 		Rectangle oldPos = ball.boundingBox();
 
-		// Have Swing tell the AnimationWindow to run its paint()
-		// method.  One could also call repaint(), but this would
-		// repaint the entire window as opposed to only the portion that
-		// has changed.
-		ball.update();
+		//1. update the speed of the ball
+		//2. time until next collision
+		//3. update the positions of the ball and flippers
+		//4. reflect
+		double[] output= new double[3];
+		output[0]=Configuration.delta_t+1;
+		ball.updateVelocity(delta_t);
+		if(gizmos!=null){ 
+			//output[0]-minTime; output[1]-collided gizmo index; output[2]-collision side
+			output = ball.timeUntilNextCollision(gizmos);
+		}
+		
+		if(output[0] <= delta_t){
+			//update ball position
+			ball.move(output[0]);
+			//update flippers position
+			if(gizmos.get((new Double(output[1])).intValue()).getType()=='L'||
+					gizmos.get((new Double(output[1])).intValue()).getType()=='R'){
+				flippersInterface flipper =(flippersInterface) gizmos.get((new Double(output[1])).intValue());
+				if(flipper.isTriggered()&&!flipper.isKeyPressed()){
+					//TODO: create moveByDeltaT method in flippers
+					flipper.move(); //update the angle
+				}else if(flipper.isKeyPressed()){
+					flipper.moveUpByDeltaT(output[0]);
+				}else{
+					flipper.moveDownByDeltaT(output[0]);
+				}
+			}//end of leftFlipper and rightFlipper case
+
+			this.handleCollision((int)(output[1]),(int)(output[2]));
+			/*try {
+				Thread.sleep((long)(delta_t*1000));
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+		}else{
+			ball.move(delta_t);
+		}
+//		ball.update();
 		Rectangle repaintArea = oldPos.union(ball.boundingBox());
 		repaint(repaintArea.x, repaintArea.y, repaintArea.width,
 				repaintArea.height);
@@ -181,9 +212,9 @@ public class AnimationWindow extends JPanel {
 			removeKeyListener(eventListener);
 		}
 
-		this.mode = mode;
+		//this.mode = mode;
 
-		if (this.mode == true) {
+		if (mode == true) {
 			// the mode is true: turn on the listeners
 			addMouseListener(eventListener);
 			addMouseMotionListener(eventListener);
@@ -195,9 +226,11 @@ public class AnimationWindow extends JPanel {
             		gizmos.get(i).setTrigger(true);
              	}
             }*/
-			timer.start();
+			//start();
+			start();
 		}
 		else {
+			stop();
 			/* for(int i= 0; i < gizmos.size();i++){//TODO:
             	if(gizmos.get(i).getType()=='L'||gizmos.get(i).getType()=='R'){
             		gizmos.get(i).setTrigger(false);
@@ -212,23 +245,13 @@ public class AnimationWindow extends JPanel {
                         }
                     }, 
                     500
-                    );*/
-			timer.stop();
+                    );
+			timer.stop();*/
 		}
 	}
 
-	//this is used in Gizmoball.java when entering the Game Mode
-	public void setGridInvisible(){
-		this.panel.setVisible(false);
-	}
-
-	//this is used in Gizmoball.java when entering the Build Mode
-	public void setGridVisible(){
-		this.panel.setVisible(true);
-	}
-
 	public void setFPS(int fps){
-		this.FRAMES_PER_SECOND = fps;
+		this.targetFPS = fps;
 	}
 
 	public void setGizmos(ArrayList<gizmosInterface> gizmos){
@@ -247,16 +270,60 @@ public class AnimationWindow extends JPanel {
 		return this.gizmos.size();
 	}
 
-	public gridPanel getGridPanel(){
-		return this.panel;
-	}
-
 	public ArrayList<gizmosInterface> getGizmos(){
 		return this.gizmos;
 	}
 
-	public int getFPS(){
-		return this.FRAMES_PER_SECOND;
+	public double getFPS(){
+		return this.targetFPS;
+	}
+
+	public synchronized void start() {
+		if (!mode) {
+			timer.start();
+		} else {
+			System.out.println("Animation is already animating.");
+		}
+	}
+
+	public synchronized void stop() {
+		mode = false;
+	}
+
+	public void run() {
+		long beforeTime, afterTime, updateTime, timeDiff, sleepTime, timeSpent;
+		//float timeInSecs;
+		beforeTime = updateTime = System.nanoTime();
+		sleepTime = (long)Configuration.delta_t;
+		initWindow(this.game);
+		mode = true;
+		while (mode) {
+
+			/*timeSpent = beforeTime - updateTime;
+			if (timeSpent > 0) {
+				timeInSecs = timeSpent * 1.0f / 1000000000.0f;
+				updateTime = System.nanoTime();
+				FPS = (FPS * 0.9f) + (1.0f / timeInSecs) * 0.1f;
+			} else {
+				updateTime = System.nanoTime();
+			}*/
+
+			update();
+
+			afterTime = System.nanoTime();
+
+			timeDiff = afterTime - beforeTime;
+			sleepTime = (1000000000 / targetFPS - timeDiff) / 1000000;
+			if (sleepTime > 0) {
+				try {
+					Thread.sleep(sleepTime);
+				} catch (InterruptedException ex) {
+					System.out.println("Thread got interrupted");
+				}
+			}
+
+			beforeTime = System.nanoTime();
+		} // end of run loop
 	}
 
 	public void restartGame(){//TODO:this method might not be necessary later, or should be modified
@@ -272,44 +339,15 @@ public class AnimationWindow extends JPanel {
 	 * outer class
 	 */
 	class AnimationEventListener extends MouseAdapter implements
-	MouseMotionListener, KeyListener, ActionListener {
-
-		// MouseAdapter gives us empty methods for the MouseListener
-		// interface: mouseClicked, mouseEntered, mouseExited, mousePressed,
-		// and mouseReleased.
+	MouseMotionListener, ActionListener,KeyListener {
 
 		/**
-		 * For this example we only need to override mouseClicked
-		 * @modifes the ball that this listener owns
-		 * @effects causes the ball to be bumped in a random direction
-		 * @param e Detected MouseEvent
-		 */
-		@Override public void mouseClicked(MouseEvent e) {
-			//ball.randomBump();
-		}
-
-		/**
-		 * MouseMotionListener interface
-		 * Override this method to act on mouse drag events. 
-		 * @param e Detected MouseEvent
-		 */ 
-		public void mouseDragged(MouseEvent e) {
-		}
-
-		/**
-		 * MouseMotionListener interface
-		 * Override this method to act on mouse move events. 
-		 * @param e Detected MouseEvent
-		 */ 
-		public void mouseMoved(MouseEvent e) {
-		}
-
-		/**
-		 * We implement the KeyListener interface so that we can bump the ball in a 
-		 * random direction if keys A-J is presse.
+		 * 'z'-'/' controlls all the left flippers and right flippers on the
+		 * game board respectively
+		 * random direction if keys 'z'-'/' is pressed.
 		 * @modifies the ball that this listener owns
-		 * @effects causes the ball to be bumped in a random direction but 
-		 * only if one of the keys A-J is pressed.
+		 * @effects causes the left flippers or right flippers to rotate
+		 * only if one of the keys 'z'-'/' is pressed.
 		 * @param e Detected Key Press Event
 		 */
 		public void keyPressed(KeyEvent e) {
@@ -352,10 +390,8 @@ public class AnimationWindow extends JPanel {
 
 			// When keyboard 'Z' is pressed, all the leftFlippers should move back to original
 			if(keynum == 90){
-				//System.out.println("keyrelease " + e.getKeyCode());
 				for(int i= 0; i < gizmos.size();i++){
 					if(gizmos.get(i).getType()=='L'){
-						//flippersInterface flipper =(flippersInterface) gizmos.get(i);
 						((flippersInterface) gizmos.get(i)).setKeyPressed(false);
 					}//end of leftFlipper and rightFlipper case
 				}  
@@ -363,10 +399,8 @@ public class AnimationWindow extends JPanel {
 
 			// When keyboard '/' is pressed, all the rightFlippers should move back to original
 			if(keynum == 47){
-				//System.out.println("keypress " + e.getKeyCode());
 				for(int i= 0; i < gizmos.size();i++){
 					if(gizmos.get(i).getType()=='R'){
-						//flippersInterface flipper =(flippersInterface) gizmos.get(i);
 						((flippersInterface) gizmos.get(i)).setKeyPressed(false);
 					}//end of leftFlipper and rightFlipper case
 				}  
@@ -379,6 +413,37 @@ public class AnimationWindow extends JPanel {
 		 */
 		public void keyTyped(KeyEvent e) {
 		}
+
+		// MouseAdapter gives us empty methods for the MouseListener
+		// interface: mouseClicked, mouseEntered, mouseExited, mousePressed,
+		// and mouseReleased.
+
+		/**
+		 * For this example we only need to override mouseClicked
+		 * @modifes the ball that this listener owns
+		 * @effects causes the ball to be bumped in a random direction
+		 * @param e Detected MouseEvent
+		 */
+		@Override public void mouseClicked(MouseEvent e) {
+			//ball.randomBump();
+		}
+
+		/**
+		 * MouseMotionListener interface
+		 * Override this method to act on mouse drag events. 
+		 * @param e Detected MouseEvent
+		 */ 
+		public void mouseDragged(MouseEvent e) {
+		}
+
+		/**
+		 * MouseMotionListener interface
+		 * Override this method to act on mouse move events. 
+		 * @param e Detected MouseEvent
+		 */ 
+		public void mouseMoved(MouseEvent e) {
+		}
+
 
 		/**
 		 * This is the callback for the timer
