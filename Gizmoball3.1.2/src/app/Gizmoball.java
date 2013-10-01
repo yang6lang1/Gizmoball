@@ -79,7 +79,6 @@ public class Gizmoball extends JFrame{
 	 * 5. Set the mode as Game Mode(by default)
 	 */
 	public Gizmoball() {
-		// Title bar
 		super("Gizmaball");
 
 		// respond to the window system asking us to quit
